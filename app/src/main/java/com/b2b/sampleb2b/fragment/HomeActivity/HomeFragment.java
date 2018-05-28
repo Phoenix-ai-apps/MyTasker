@@ -156,7 +156,6 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                         imgFolder.setColorFilter(new PorterDuffColorFilter(folderColor, PorterDuff.Mode.SRC_IN));
                     }
                 });
-
         txtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
