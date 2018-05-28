@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">MyTask</string>
+    <string name="inbox">Inbox</string>
+    <string name="today">Today</string>
+    <string name="this_week">This week</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="trips">Trips</string>
+    <string name="completed">Completed</string>
+    <string name="meetings">Meetings</string>
+    <string name="new_folder">New Folder</string>
+    <string name="enter_folder_name">Enter folder name</string>
+    <string name="create_folder">Create folder</string>
+    <string name="select_folder_colour">Select folder colour</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_date">Enter date</string>
+    <string name="enter_time">Enter time</string>
+    <string name="enter_meeting_details">Enter meeting details...</string>
+    <string name="select_priority">Select priority</string>
+    <string name="edit">EDIT</string>
+    <string name="edit_lower">Edit</string>
+    <string name="enter_task_name">Enter task name</string>
+    <string name="type_here">Type here...</string>
+    <string name="priority">Priority</string>
+    <string name="none">None</string>
+    <string name="move_to">Move To</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="add_task">Add task</string>
+    <string name="work">Work</string>
+    <string name="delete">Delete</string>
+    <string name="ok">Ok</string>
+    <string name="lbl_exit_task_message">Do you want to exit task?</string>
+    <string name="select_a_filter">Select a filter</string>
+    <string name="select_repeat">Select Repeat Mode</string>
+    <string name="select_move_to">Select Move to</string>
+    <string name="due">Due</string>
+    <string name="remind_me">Remind me at</string>
+    <string name="select_repeat_mode">Select repeat mode</string>
+
+    <array name="colours">
+        <item>@color/light_1</item>
+        <item>@color/light_2</item>
+        <item>@color/light_3</item>
+        <item>@color/light_4</item>
+        <item>@color/light_5</item>
+        <item>@color/light_6</item>
+        <item>@color/light_7</item>
+        <item>@color/light_8</item>
+        <item>@color/light_9</item>
+        <item>@color/light_10</item>
+        <item>@color/light_11</item>
+        <item>@color/light_12</item>
+        <item>@color/light_13</item>
+        <item>@color/light_14</item>
+        <item>@color/light_15</item>
+        <item>@color/light_16</item>
+        <item>@color/light_17</item>
+        <item>@color/light_18</item>
+    </array>
+
+</resources>
