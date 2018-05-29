@@ -17,7 +17,7 @@ import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
-import com.b2b.sampleb2b.fragment.FolderDetailsActivity.FolderDetailsFragment;
+import com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 
 import java.util.ArrayList;
 import java.util.List;

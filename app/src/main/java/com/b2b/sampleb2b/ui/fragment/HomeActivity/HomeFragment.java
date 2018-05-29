@@ -1,11 +1,9 @@
-package com.b2b.sampleb2b.fragment.HomeActivity;
+package com.b2b.sampleb2b.ui.fragment.HomeActivity;
 
 import android.app.Dialog;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -17,8 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.b2b.sampleb2b.AppExecutors;
-import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.CustomFolderTaskAdapter;
@@ -43,18 +38,14 @@ import com.b2b.sampleb2b.adapters.GridviewAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.FragementHomeBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
-import com.b2b.sampleb2b.db.dao.FolderDao;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
-import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
-import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
 import com.b2b.sampleb2b.viewModel.FolderViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -91,8 +82,8 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         task_list = new ArrayList<>();
         list = new ArrayList<>();
         iEditDeletePopup = (IEditDeletePopup) this;
-        mBinding.imgAddTask.setOnClickListener(this);
-        mBinding.txtNewFolder.setOnClickListener(this);
+        mBinding.footer.imgAddTask.setOnClickListener(this);
+        mBinding.footer.txtNewFolder.setOnClickListener(this);
         customFolderTaskAdapter = new CustomFolderTaskAdapter(iEditDeletePopup);
         mBinding.recyclerview.setAdapter(customFolderTaskAdapter);
     }
@@ -166,6 +157,9 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     getActivity()
                     .getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                    if(!list.isEmpty()){
+                        list.clear();
+                    }
                     FolderEntity folderTask = new FolderEntity();
                     folderTask.setFrom(ADD_FOLDER);
                     folderTask.setFolderName(folderName);
@@ -222,6 +216,9 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                             getActivity()
                                     .getWindow()
                                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                            if(!list.isEmpty()){
+                                list.clear();
+                            }
                             FolderEntity folderTask = new FolderEntity();
                             AddTaskDetails taskDetailsEntity = new AddTaskDetails();
                             List<AddTaskDetails> entityList = new ArrayList<>();

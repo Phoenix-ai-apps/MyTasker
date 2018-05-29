@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.b2b.sampleb2b.R;
-import com.b2b.sampleb2b.fragment.ShowTaskListByDate.TaskListByDateFragment;
+import com.b2b.sampleb2b.ui.fragment.ShowTaskListByDate.TaskListByDateFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

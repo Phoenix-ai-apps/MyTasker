@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
-import com.b2b.sampleb2b.fragment.HomeActivity.HomeFragment;
+import com.b2b.sampleb2b.ui.fragment.HomeActivity.HomeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

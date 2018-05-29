@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.b2b.sampleb2b.databinding.TemplateTaskFolderItemBinding;
+import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.interfaces.Folder;
 import com.b2b.sampleb2b.ui.AddTaskActivity;
 import com.b2b.sampleb2b.ui.FolderDetailsActivity;
@@ -39,7 +40,7 @@ import butterknife.ButterKnife;
 
 public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTaskAdapter.RecyclerViewHolders> implements AllConstants {
 
-    private List<FolderTask> list = new ArrayList<>();
+    //private List<FolderTask> list = new ArrayList<>();
     private Activity activity;
     private IEditDeletePopup iEditDeletePopup;
     List<? extends Folder> mFolderList;
@@ -98,9 +99,8 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
     @Override
     public void onBindViewHolder(final RecyclerViewHolders holder, final int position) {
 
-        final FolderTask task = list.get(position);
+        final FolderEntity task = (FolderEntity)mFolderList.get(position);
         holder.binding.setFolder(mFolderList.get(position));
-        holder.binding.executePendingBindings();
 
         holder.binding.swipeItem.setShowMode(SwipeLayout.ShowMode.PullOut);
         holder.binding.swipeItem.setLeftSwipeEnabled(false);
@@ -146,6 +146,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
             }
         });
 
+        holder.binding.executePendingBindings();
         // mItemManger is member in RecyclerSwipeAdapter Class
         mItemManger.bindView(holder.itemView, position);
     }
@@ -157,7 +158,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return mFolderList == null ? 0 : mFolderList.size();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.b2b.sampleb2b.fragment.ShowTaskListByDate;
+package com.b2b.sampleb2b.ui.fragment.ShowTaskListByDate;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:padding="@dimen/_5sdp"
-                    android:text="@{folder.folderName}"
+                    app:folderNameText="@{folder}"
                     android:textColor="@android:color/black"
                     app:layout_constraintLeft_toRightOf="@+id/img_folder"
                     app:layout_constraintRight_toLeftOf="@+id/txt_unseen_inbox" />
@@ -129,13 +129,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/_3sdp"
-                    android:text="@{folder.folderTaskList.size()}"
                     android:textSize="@dimen/_8sdp"
+                    app:folderTaskSize="@{folder}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/img_arrow_inbox"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
-
+                <!-- android:text="@{folder.folderTaskList.size()}"-->
 
                 <ImageView
                     android:id="@+id/img_arrow_inbox"

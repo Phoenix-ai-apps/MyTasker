@@ -17,12 +17,37 @@
 package com.b2b.sampleb2b.adapters;
 
 import android.databinding.BindingAdapter;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
+
+import com.b2b.sampleb2b.interfaces.Folder;
 
 
 public class BindingAdapters {
     @BindingAdapter("visibleGone")
     public static void showHide(View view, boolean show) {
         view.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @BindingAdapter("folderNameText")
+    public static void setFolderNameText(View view, Folder folder) {
+        String name = "";
+        if(folder != null && !TextUtils.isEmpty(folder.getFolderName())){
+            name = folder.getFolderName();
+        }else if(folder.getTaskDetails() != null && folder.getTaskDetails().size() > 0
+                && !TextUtils.isEmpty(folder.getTaskDetails().get(0).getTaskName())){
+            name = folder.getTaskDetails().get(0).getTaskName();
+        }
+        ((TextView) view).setText(name);
+    }
+
+    @BindingAdapter("folderTaskSize")
+    public static void setFolderTaskSize(View view, Folder folder) {
+        int size = 0;
+        if(folder.getTaskDetails() != null && folder.getTaskDetails().size() > 0){
+            size = folder.getTaskDetails().size();
+        }
+        ((TextView) view).setText(""+size);
     }
 }

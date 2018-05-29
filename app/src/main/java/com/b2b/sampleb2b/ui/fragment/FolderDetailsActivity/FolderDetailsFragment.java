@@ -1,4 +1,4 @@
-package com.b2b.sampleb2b.fragment.FolderDetailsActivity;
+package com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.b2b.sampleb2b.R;
-import com.b2b.sampleb2b.adapters.CustomFolderTaskAdapter;
 import com.b2b.sampleb2b.adapters.GridviewAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.models.FolderTask;
