@@ -176,8 +176,8 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     AppExecutors appExecutors = new AppExecutors();
                     appExecutors.getExeDiskIO().execute(()->{
                         database.getFolderDao().insertAllFolder(list);
+                        Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                     });
-                    Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
 
                 } else {
                     Toast.makeText(getActivity(), "Enter FolderTask Name", Toast.LENGTH_SHORT).show();

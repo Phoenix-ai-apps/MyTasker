@@ -51,7 +51,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
     public void setFolderList(final List<? extends Folder> folderList){
         if(mFolderList == null){
             mFolderList = folderList;
-            notifyItemRangeInserted(0,mFolderList.size());
+            notifyItemRangeInserted(0,folderList.size());
         }else {
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
