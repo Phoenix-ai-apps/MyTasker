@@ -24,9 +24,9 @@
     <string name="priority">Priority</string>
     <string name="none">None</string>
     <string name="move_to">Move To</string>
-    <string name="select_date">Select Date</string>
-    <string name="select_time">Select Time</string>
-    <string name="add_task">Add task</string>
+    <string name="select_date">Select Task date</string>
+    <string name="select_time">Select Task Time</string>
+    <string name="add_task">Enter Task</string>
     <string name="work">Work</string>
     <string name="delete">Delete</string>
     <string name="ok">Ok</string>

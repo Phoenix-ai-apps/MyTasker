@@ -15,10 +15,6 @@ import com.b2b.sampleb2b.ui.fragment.ShowTaskListByDate.TaskListByDateFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Nihar.s on 15/5/18.
- */
-
 public class ShowTaskListByDateActivity extends AppCompatActivity implements View.OnClickListener {
 
     //@formatter:off

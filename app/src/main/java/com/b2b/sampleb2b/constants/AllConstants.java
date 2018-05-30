@@ -12,6 +12,7 @@ public interface AllConstants {
     String FROM_HOME_FRAGMENT = "HOME";
     String SWIPE_EDIT         = "edit";
     String SWIPE_DELETE       = "delete";
+    String FOLDER_OBJ         = "folderObj";
 
 
 }

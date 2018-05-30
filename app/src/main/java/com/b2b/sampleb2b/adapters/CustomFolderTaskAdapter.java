@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,11 +124,18 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                     public void onClick(View v) {
                         if (task.getFrom().equalsIgnoreCase(ADD_FOLDER)) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(TITLE, task.getFolderName());
+                            if(task != null && !TextUtils.isEmpty(task.getFolderName())){
+                                bundle.putString(TITLE, task.getFolderName());
+                            }
                             ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
                         } else {
                             Bundle bundle = new Bundle();
-                            bundle.putString(TITLE, task.getFolderName());
+                            if(task != null && task.getTaskDetails() != null
+                                    && task.getTaskDetails().size() > 0
+                                    && !TextUtils.isEmpty(task.getTaskDetails().get(0).getTaskName())){
+                                bundle.putString(TITLE, task.getTaskDetails().get(0).getTaskName());
+                            }
+                            bundle.putParcelable(FOLDER_OBJ, task);
                             ApplicationUtils.startActivityIntent(activity, AddTaskActivity.class, bundle);
                         }
                     }

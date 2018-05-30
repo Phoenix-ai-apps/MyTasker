@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     public View onCreateView(
             LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater,R.layout.fragement_home, container, false);
-        ButterKnife.bind(this, mBinding.getRoot());
+        mBinding.setLifecycleOwner(this);
         initializeResources();
         return mBinding.getRoot();
     }

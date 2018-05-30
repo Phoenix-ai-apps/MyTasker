@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.b2b.sampleb2b.interfaces.Folder;
+import com.b2b.sampleb2b.models.AddTaskDetails;
 
 
 public class BindingAdapters {
@@ -49,5 +50,32 @@ public class BindingAdapters {
             size = folder.getTaskDetails().size();
         }
         ((TextView) view).setText(""+size);
+    }
+
+    @BindingAdapter("taskDate")
+    public static void setTaskDate(View view, AddTaskDetails addTaskDetails) {
+        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskDate())){
+            ((TextView) view).setText(addTaskDetails.getTaskDate());
+        }else {
+            ((TextView) view).setText("Select Task date");
+        }
+    }
+
+    @BindingAdapter("taskTime")
+    public static void setTaskTime(View view, AddTaskDetails addTaskDetails) {
+        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskTime())){
+            ((TextView) view).setText(addTaskDetails.getTaskTime());
+        }else {
+            ((TextView) view).setText("Select Task Time");
+        }
+    }
+
+    @BindingAdapter("taskNote")
+    public static void setTaskNote(View view, AddTaskDetails addTaskDetails) {
+        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskNote())){
+            ((TextView) view).setText(addTaskDetails.getTaskNote());
+        }else {
+            ((TextView) view).setText("");
+        }
     }
 }

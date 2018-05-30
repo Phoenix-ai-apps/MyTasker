@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,9 +23,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.b2b.sampleb2b.AppExecutors;
+import com.b2b.sampleb2b.DataRepository;
+import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
+import com.b2b.sampleb2b.databinding.ActivityAddTaskBinding;
+import com.b2b.sampleb2b.db.MyTaskDatabase;
+import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
 import com.b2b.sampleb2b.receiver.TaskAlarmReceiver;
 
@@ -41,75 +49,61 @@ import butterknife.ButterKnife;
 
 public class AddTaskActivity extends AppCompatActivity implements AllConstants, View.OnClickListener {
 
-    private static final String TAG = "AddTaskActivity";
-    //@formatter:off
-
-    @BindView(R.id.txt_meeting_date)         AppCompatTextView  txtMeetingDate;
-    @BindView(R.id.txt_meeting_time)         AppCompatTextView  txtMeetingTime;
-    @BindView(R.id.txt_task_name)            AppCompatTextView  txtTaskName;
-    @BindView(R.id.txt_repeat_mode)          AppCompatTextView  txtRepeatMode;
-    @BindView(R.id.priority_none)            AppCompatTextView  priorityNone;
-    @BindView(R.id.priority_one)             AppCompatTextView  priorityOne;
-    @BindView(R.id.priority_two)             AppCompatTextView  priorityTwo;
-    @BindView(R.id.priority_three)           AppCompatTextView  priorityThree;
-    @BindView(R.id.txt_repeatalarm_date)     AppCompatTextView  txtRepeatalarmDate;
-    @BindView(R.id.tv_cancel)                AppCompatTextView  tvCancel;
-    @BindView(R.id.tv_save)                  AppCompatTextView  tvSave;
-    @BindView(R.id.title_dialog)             AppCompatTextView  titleBottomDialog;
-    @BindView(R.id.img_clear_date)           AppCompatImageView imgCleaDate;
-    @BindView(R.id.img_clear_time)           AppCompatImageView imgClearTime;
-    @BindView(R.id.layout_repeat)            ConstraintLayout   layoutRepeat;
-    @BindView(R.id.layout_moveto)            ConstraintLayout   layoutMoveto;
-    @BindView(R.id.recyclerview)             RecyclerView       recyclerview;
-    @BindView(R.id.edt_task_note)            AppCompatEditText  edtTaskNote;
-
-    //@formatter:on
-
-    private BottomSheetBehavior mBottomSheetBehavior;
-    private List<String> listFilter;
-    private LinearLayoutManager mLayoutManager;
-    private int prorityType;
-
+    private static final String TAG =      "AddTaskActivity";
+    private BottomSheetBehavior             mBottomSheetBehavior;
+    private List<String>                    listFilter;
+    private int                             prorityType;
+    private ActivityAddTaskBinding          taskBinding;
+    private FilterBottomDialogAdapter       filterBottomDialogAdapter ;
+    private FolderEntity   folderEntity   = null;
+    private AddTaskDetails addTaskDetails = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task);
-        ButterKnife.bind(this);
-
+        taskBinding = DataBindingUtil.setContentView(this,R.layout.activity_add_task);
+        taskBinding.setLifecycleOwner(this);
         initializeResources();
     }
 
     private void initializeResources() {
 
         Bundle bundle = this.getIntent().getExtras();
-        String title = bundle.getString(TITLE);
-        txtTaskName.setText(title);
+        String title = "";
+        if(bundle.containsKey(TITLE)){
+            title = bundle.getString(TITLE);
+            taskBinding.setTaskName(title);
+        }
+        if(bundle.containsKey(FOLDER_OBJ)){
+            folderEntity = bundle.getParcelable(FOLDER_OBJ);
+            if(folderEntity.getTaskDetails() != null && folderEntity.getTaskDetails().size() > 0){
+                addTaskDetails = folderEntity.getTaskDetails().get(0);
+                taskBinding.setTaskDetails(addTaskDetails);
+            }
+        }
 
-        tvCancel.setOnClickListener(this);
-        tvSave.setOnClickListener(this);
-        txtMeetingDate.setOnClickListener(this);
-        txtMeetingTime.setOnClickListener(this);
-        imgClearTime.setOnClickListener(this);
-        imgCleaDate.setOnClickListener(this);
-        priorityNone.setOnClickListener(this);
-        priorityOne.setOnClickListener(this);
-        priorityTwo.setOnClickListener(this);
-        priorityThree.setOnClickListener(this);
-        layoutRepeat.setOnClickListener(this);
-        layoutMoveto.setOnClickListener(this);
-
+        taskBinding.tvCancel.setOnClickListener(this);
+        taskBinding.tvSave.setOnClickListener(this);
+        taskBinding.txtMeetingDate.setOnClickListener(this);
+        taskBinding.txtMeetingTime.setOnClickListener(this);
+        taskBinding.imgClearTime.setOnClickListener(this);
+        taskBinding.imgClearDate.setOnClickListener(this);
+        taskBinding.priorityNone.setOnClickListener(this);
+        taskBinding.priorityOne.setOnClickListener(this);
+        taskBinding.priorityTwo.setOnClickListener(this);
+        taskBinding.priorityThree.setOnClickListener(this);
+        taskBinding.layoutRepeat.setOnClickListener(this);
+        taskBinding.layoutMoveto.setOnClickListener(this);
 
         //Find bottom Sheet ID
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+       // View bottomSheet = findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(taskBinding.bottomSheet);
 
-
-//By default set BottomSheet Behavior as Collapsed and Height 0
+       //By default set BottomSheet Behavior as Collapsed and Height 0
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mBottomSheetBehavior.setPeekHeight(0);
 
-//If you want to handle callback of Sheet Behavior you can use below code
+      //If you want to handle callback of Sheet Behavior you can use below code
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -150,148 +144,126 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         listFilter.add("Filter 4");
         listFilter.add("Filter 5");
         listFilter.add("Filter 6");
-
-
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerview.setLayoutManager(mLayoutManager);
-        recyclerview.setItemAnimator(new DefaultItemAnimator());
-
+        filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
+        taskBinding.incFilter.cmnRecView.recyclerview.setAdapter(filterBottomDialogAdapter);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
             case R.id.txt_meeting_date:
-                ApplicationUtils.showDatePicker(AddTaskActivity.this, txtMeetingDate);
+                ApplicationUtils.showDatePicker(AddTaskActivity.this, taskBinding.txtMeetingDate);
                 break;
-
             case R.id.txt_meeting_time:
-                ApplicationUtils.showTimePicker(AddTaskActivity.this, txtMeetingTime, txtRepeatalarmDate);
+                ApplicationUtils.showTimePicker(AddTaskActivity.this, taskBinding.txtMeetingTime, taskBinding.txtRepeatalarmDate);
                 break;
-
-
             case R.id.img_clear_date:
-                txtMeetingDate.setText(R.string.select_date);
-                txtRepeatalarmDate.setVisibility(View.GONE);
+                taskBinding.txtMeetingDate.setText(R.string.select_date);
+                taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
-
             case R.id.img_clear_time:
-                txtMeetingTime.setText(R.string.select_time);
-                txtRepeatalarmDate.setVisibility(View.GONE);
+                taskBinding.txtMeetingTime.setText(R.string.select_time);
+                taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
-
-
             case R.id.priority_none:
                 prorityType = 0;
-                priorityNone.setTextColor(ContextCompat.getColor(this, R.color.white));
-                priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners_click));
-
-                priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
-                priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
-                priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
+                taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.white));
+                taskBinding.priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners_click));
+                taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
-
             case R.id.priority_one:
                 prorityType = 1;
-                priorityOne.setTextColor(ContextCompat.getColor(this, R.color.white));
-                priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
-
-                priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
-                priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
-                priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
+                taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.white));
+                taskBinding.priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
+                taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
+                taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
-
             case R.id.priority_two:
                 prorityType = 2;
-                priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.white));
-                priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
-
-                priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
-                priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
-                priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
-
+                taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.white));
+                taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
+                taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
+                taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
-
             case R.id.priority_three:
                 prorityType = 3;
-                priorityThree.setTextColor(ContextCompat.getColor(this, R.color.white));
-                priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners_click));
-
-                priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
-                priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
-                priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-                priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.white));
+                taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners_click));
+                taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners));
+                taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
+                taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+                taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
                 break;
-
-
             case R.id.layout_repeat:
-                titleBottomDialog.setText(R.string.select_repeat);
-                titleBottomDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repeat, 0, 0, 0);
-
+               taskBinding.incFilter.titleDialog.setText(R.string.select_repeat);
+               taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repeat, 0, 0, 0);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    FilterBottomDialogAdapter filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
-                    recyclerview.setAdapter(filterBottomDialogAdapter);
-                    recyclerview.setNestedScrollingEnabled(false);
                     filterBottomDialogAdapter.notifyDataSetChanged();
                     //If state is in collapse mode expand it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
                     //else if state is expanded collapse it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
                 }
-
                 break;
-
-
             case R.id.layout_moveto:
-                titleBottomDialog.setText(R.string.select_move_to);
-                titleBottomDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_folder_stroke, 0, 0, 0);
-
+                taskBinding.incFilter.titleDialog.setText(R.string.select_move_to);
+                taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_folder_stroke, 0, 0, 0);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    FilterBottomDialogAdapter filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
-                    recyclerview.setAdapter(filterBottomDialogAdapter);
-                    recyclerview.setNestedScrollingEnabled(false);
                     filterBottomDialogAdapter.notifyDataSetChanged();
-
                     //If state is in collapse mode expand it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
                     //else if state is expanded collapse it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
                 }
                 break;
-
             case R.id.tv_save:
-
-                if (txtMeetingDate.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_date))) {
-                    Toast.makeText(this, "Enter Meeting Date", Toast.LENGTH_SHORT).show();
-                } else if (txtMeetingTime.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_time))) {
-                    Toast.makeText(this, "Enter Meeting Time", Toast.LENGTH_SHORT).show();
-                } else if (txtRepeatMode.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_repeat_mode))) {
+                if (taskBinding.txtMeetingDate.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_date))) {
+                    Toast.makeText(this, "Please Select Task Date", Toast.LENGTH_SHORT).show();
+                } else if (taskBinding.txtMeetingTime.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_time))) {
+                    Toast.makeText(this, "Enter Select Task Reminder Time", Toast.LENGTH_SHORT).show();
+                }/* else if (taskBinding.txtRepeatMode.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_repeat_mode))) {
                     Toast.makeText(this, "Select task repeat mode", Toast.LENGTH_SHORT).show();
-                } else if (!TextUtils.isEmpty(edtTaskNote.getText().toString().trim())) {
+                }*/ else if (TextUtils.isEmpty(taskBinding.edtTaskNote.getText().toString().trim())) {
                     Toast.makeText(this, "Enter task note", Toast.LENGTH_SHORT).show();
                 } else if (prorityType == 0) {
                     Toast.makeText(this, "Select prority type", Toast.LENGTH_SHORT).show();
+                }else{
+                    //start DB Transaction
+                    addTaskDetails.setTaskDate(taskBinding.txtMeetingDate.getText().toString().trim());
+                    addTaskDetails.setTaskTime(taskBinding.txtMeetingTime.getText().toString().trim());
+                   // addTaskDetails.setTaskRepeatMode(taskBinding.txtRepeatMode.getText().toString().trim());
+                    addTaskDetails.setTaskNote(taskBinding.edtTaskNote.getText().toString().trim()   );
+                    addTaskDetails.setTaskPriority(String.valueOf(prorityType));
+                    List<AddTaskDetails> taskDetailsList = new ArrayList<>();
+                    taskDetailsList.add(addTaskDetails);
+                    folderEntity.setTaskDetails(taskDetailsList);
+                    AppExecutors appExecutors = new AppExecutors();
+                    appExecutors.getExeDiskIO().execute(()->{
+                        MyTaskDatabase database = ((MyTaskApp)getApplicationContext()).getDatabase();
+                        int update = database.getFolderDao().updateFolderTask(folderEntity);
+                        finish();
+                    });
                 }
                 break;
-
             case R.id.tv_cancel:
-                ApplicationUtils.showDialog(AddTaskActivity.this, getString(R.string.lbl_exit_task_message));
+                finish();
                 break;
         }
     }
@@ -301,14 +273,11 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         Intent alarmIntent = new Intent(AddTaskActivity.this, TaskAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
-
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 2);
         alarmStartTime.set(Calendar.MINUTE, 13);
         alarmStartTime.set(Calendar.SECOND, 00);
-
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), 0, pendingIntent);
-
     }
 
     /**
@@ -320,7 +289,6 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         Intent alarmIntent = new Intent(AddTaskActivity.this, TaskAlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
-
     }
 
 
