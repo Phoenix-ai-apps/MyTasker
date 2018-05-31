@@ -42,6 +42,8 @@ public class SubFolderEntity implements SubFolder {
         return childFolder;
     }
 
+    public SubFolderEntity(){}
+
     public SubFolderEntity( int id,String parentFolder, String childFolder){
         this.id = id;
         this.parentFolder = parentFolder;

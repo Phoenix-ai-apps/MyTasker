@@ -31,4 +31,9 @@ public interface FolderDao {
     @Update
     int updateFolderTask(FolderEntity folderEntity);
 
+    @Query("Select * from AllFolder where InsertedFrom=:from")
+    default FolderEntity getFolderByFrom(String from) {
+        return null;
+    }
+
 }

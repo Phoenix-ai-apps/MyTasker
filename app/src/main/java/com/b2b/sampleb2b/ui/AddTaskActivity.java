@@ -96,7 +96,6 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         taskBinding.layoutMoveto.setOnClickListener(this);
 
         //Find bottom Sheet ID
-       // View bottomSheet = findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(taskBinding.bottomSheet);
 
        //By default set BottomSheet Behavior as Collapsed and Height 0
@@ -290,6 +289,4 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
-
-
 }

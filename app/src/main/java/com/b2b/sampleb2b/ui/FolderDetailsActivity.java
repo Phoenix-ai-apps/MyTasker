@@ -1,8 +1,11 @@
 package com.b2b.sampleb2b.ui;
 
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
@@ -16,6 +19,8 @@ import android.view.View;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
+import com.b2b.sampleb2b.databinding.ActivityFolderDetailsBinding;
+import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
 import com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 
@@ -28,41 +33,39 @@ import butterknife.ButterKnife;
 public class FolderDetailsActivity extends AppCompatActivity implements AllConstants, View.OnClickListener {
 
     private static final String TAG = "FolderDetailsActivity";
-
-    //@formatter:off
-
-    @BindView(R.id.txt_toolbar_title)       AppCompatTextView txtToolbarTitle;
-    @BindView(R.id.img_back_arrow)          AppCompatImageView imgBack;
-    @BindView(R.id.aiv_share)               AppCompatImageView aivShare;
-    @BindView(R.id.img_filter)              AppCompatImageView imgFilter;
-    @BindView(R.id.recyclerview)            RecyclerView recyclerview;
-    @BindView(R.id.title_dialog)            AppCompatTextView titleBottomDialog;
-
-     //@formatter:on
-
     private BottomSheetBehavior mBottomSheetBehavior;
     private List<String> listFilter;
     private LinearLayoutManager mLayoutManager;
+    private String title;
+    private FolderEntity folderEntity;
+    private ActivityFolderDetailsBinding binding;
+    private FilterBottomDialogAdapter filterBottomDialogAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_folder_details);
-
-        ButterKnife.bind(this);
-
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_folder_details);
+        binding.setLifecycleOwner(this);
+        Intent intent = getIntent();
+        if(intent != null){
+            if(intent.hasExtra(TITLE)){
+                title = intent.getStringExtra(TITLE);
+            }
+            if(intent.hasExtra(FOLDER_OBJ)){
+                folderEntity = intent.getParcelableExtra(FOLDER_OBJ);
+            }
+        }
         initializeResources();
-
     }
 
     private void initializeResources() {
         Bundle bundle = this.getIntent().getExtras();
         String title = bundle.getString(TITLE);
-        txtToolbarTitle.setText(title);
+        binding.includeToolbar.txtToolbarTitle.setText(title);
 
-        imgBack.setOnClickListener(this);
-        aivShare.setOnClickListener(this);
-        imgFilter.setOnClickListener(this);
+        binding.includeToolbar.imgBackArrow.setOnClickListener(this);
+        binding.includeToolbar.aivShare.setOnClickListener(this);
+        binding.includeToolbar.imgFilter.setOnClickListener(this);
 
         addFragment(new FolderDetailsFragment());
 
@@ -70,8 +73,8 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
         View bottomSheet = findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-        titleBottomDialog.setText(R.string.select_a_filter);
-        titleBottomDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_swap, 0, 0, 0);
+        binding.incFilter.titleDialog.setText(R.string.select_a_filter);
+        binding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_swap, 0, 0, 0);
 
         //By default set BottomSheet Behavior as Collapsed and Height 0
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -118,19 +121,20 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
         listFilter.add("Filter 4");
         listFilter.add("Filter 5");
         listFilter.add("Filter 6");
+        filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
 
-
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerview.setLayoutManager(mLayoutManager);
-        recyclerview.setItemAnimator(new DefaultItemAnimator());
-
+        binding.incFilter.cmnRecView.recyclerview.setAdapter(filterBottomDialogAdapter);
     }
 
 
-    private void addFragment(FolderDetailsFragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout_main, fragment);
-        transaction.commitAllowingStateLoss();
+    private void addFragment(Fragment fragment) {
+         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+         Bundle bundle = new Bundle();
+         bundle.putString(TITLE, title);
+         bundle.putParcelable(FOLDER_OBJ, folderEntity);
+         fragment.setArguments(bundle);
+         transaction.replace(R.id.frameLayout_main, fragment);
+         transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -157,20 +161,13 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
 
             case R.id.img_filter:
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    FilterBottomDialogAdapter filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
-                    recyclerview.setAdapter(filterBottomDialogAdapter);
-                    recyclerview.setNestedScrollingEnabled(false);
-                    filterBottomDialogAdapter.notifyDataSetChanged();
-//If state is in collapse mode expand it
+                    //If state is in collapse mode expand it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
-//else if state is expanded collapse it
+                    //else if state is expanded collapse it
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
                 break;
-
         }
-
     }
-
 }

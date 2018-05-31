@@ -1,67 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mToolbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/white"
-    android:gravity="center"
-    app:theme="@style/Theme.MyFancyTheme">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <data>
+        <variable
+            name="folder"
+            type="com.b2b.sampleb2b.db.entities.FolderEntity"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/mToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:gravity="center"
+        app:theme="@style/Theme.MyFancyTheme">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_back_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:clickable="true"
-                android:onClick="backToPrevious"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_back" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/txt_toolbar_title"
-                style="@style/Both_Wrap_style"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_back_arrow"
-                android:paddingLeft="@dimen/_5sdp"
-                android:text="hkhdskajhfk"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15sdp" />
+            android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/layout_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true">
+                app:layout_constraintLeft_toLeftOf="parent">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_filter"
+                    android:id="@+id/img_back_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:clickable="true"
+                    android:onClick="backToPrevious"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ic_back" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txt_toolbar_title"
+                    style="@style/Both_Wrap_style"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img_back_arrow"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="@{folder.folderName}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15sdp" />
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_5sdp"
-                    android:src="@drawable/ic_swap" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/aiv_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/img_filter"
-                    android:padding="@dimen/_5sdp"
-                    android:src="@drawable/share"
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/img_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_swap" />
 
-                    />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/aiv_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/img_filter"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/share" />
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
 
-    </android.support.constraint.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_500"/>
 
-</RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
+
+    </RelativeLayout>
+
+</layout>

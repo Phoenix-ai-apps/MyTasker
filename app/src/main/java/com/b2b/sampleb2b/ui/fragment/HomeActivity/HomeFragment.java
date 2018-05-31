@@ -56,14 +56,14 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     private static final String TAG = "HomeFragment";
 
     // @formatter:on
-    int folderColor;
-    private int[] mColours = new int[0];
-    private List<String> task_list;
-    private List<FolderEntity> list;
-    private Context context;
-    public  GridviewAdapter gridviewAdapter;
-    private IEditDeletePopup iEditDeletePopup;
-    private FragementHomeBinding mBinding;
+    int                             folderColor;
+    private int[]                   mColours = new int[0];
+    private List<String>            task_list;
+    private List<FolderEntity>      list;
+    private Context                 context;
+    public  GridviewAdapter         gridviewAdapter;
+    private IEditDeletePopup        iEditDeletePopup;
+    private FragementHomeBinding    mBinding;
     private CustomFolderTaskAdapter customFolderTaskAdapter;
 
     @Nullable

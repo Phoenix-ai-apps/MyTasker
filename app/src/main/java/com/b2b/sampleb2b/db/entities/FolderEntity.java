@@ -26,7 +26,7 @@ public class FolderEntity implements Folder, Parcelable {
     private String folderName;
     @ColumnInfo(name = "Color")
     private int color;
-    @ColumnInfo(name = "From")
+    @ColumnInfo(name = "InsertedFrom")
     private String from ;
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "TaskDetails")
