@@ -7,6 +7,8 @@ import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
+import com.b2b.sampleb2b.helper.ApplicationHelper;
+import com.b2b.sampleb2b.helper.HelperInterface;
 import com.b2b.sampleb2b.interfaces.TaskDetails;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * Created by Abhishek Singh on 27/5/18.
  */
-public class DataRepository {
+public class DataRepository implements HelperInterface{
     private static DataRepository dataRepository;
     private final MyTaskDatabase taskDatabase;
     private MediatorLiveData<List<FolderEntity>> obervableFolderEntity;
@@ -49,6 +51,10 @@ public class DataRepository {
         return obervableFolderEntity;
     }
 
+    public LiveData<List<FolderEntity>> getAllHomeFolder(String from){
+        return taskDatabase.getFolderDao().getFolderByName(from);
+    }
+
     public LiveData<List<TaskDetailsEntity>> getAllTaskDetails(){
         return taskDatabase.getTaskDetailsDao().loadAllTaskDetails();
     }
@@ -58,4 +64,8 @@ public class DataRepository {
     }
 
 
+    @Override
+    public ApplicationHelper getHelper() {
+        return ApplicationHelper.getInstance();
+    }
 }

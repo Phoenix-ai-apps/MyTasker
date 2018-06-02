@@ -7,6 +7,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -23,12 +24,14 @@ import com.b2b.sampleb2b.helper.HelperInterface;
 
 import java.util.List;
 
+import static com.b2b.sampleb2b.constants.AllConstants.DATABASE_VERSION;
+
 /**
  * Created by Abhishek Singh on 27/5/18.
  */
 @Database(entities = {FolderEntity.class, TaskDetailsEntity.class,
                       SubFolderEntity.class}
-                    , version = 1)
+                    , version = DATABASE_VERSION)
 @TypeConverters({ObjectConverter.class})
 public abstract class MyTaskDatabase extends RoomDatabase implements HelperInterface {
     private static MyTaskDatabase taskDatabase;
@@ -71,7 +74,12 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
                             database.setDatabaseCreated();
                         });
                     }
-                }).build();
+                })
+                //.fallbackToDestructiveMigration() // This method clear the DB and create new DB from Scratch.
+                                                 // So data will be wipedout. --Use this mtd in special scenarios.
+                .addMigrations(MIGRATION_1_2)
+                //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .build();
     }
 
     private void updateDatabaseCreated(final Context context) {
@@ -101,6 +109,22 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
         } catch (InterruptedException ignored) {
         }
     }
+
+    //Migrations
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {  
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // Since we didn't alter the table, there's nothing else to do here.
+        }
+    };
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE users "
+                    + " ADD COLUMN last_update INTEGER");
+        }
+    };
 
     public LiveData<Boolean> getDatabaseCreated() {
         return isDBCreated;

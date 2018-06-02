@@ -6,14 +6,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.b2b.sampleb2b.databinding.TemplateTaskFolderItemBinding;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
@@ -22,18 +19,14 @@ import com.b2b.sampleb2b.ui.AddTaskActivity;
 import com.b2b.sampleb2b.ui.FolderDetailsActivity;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.constants.AllConstants;
+import com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
-import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by root on 23/4/18.
@@ -78,7 +71,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                     Folder oldProduct = mFolderList.get(oldItemPosition);
                     return newProduct.getId() == oldProduct.getId()
                             && Objects.equals(newProduct.getFolderName(), oldProduct.getFolderName())
-                            && Objects.equals(newProduct.getFrom(), oldProduct.getFrom())
+                            && Objects.equals(newProduct.getInsertedFrom(), oldProduct.getInsertedFrom())
                             && newProduct.getTaskDetails() == oldProduct.getTaskDetails();
                 }
             });
@@ -99,7 +92,6 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolders holder, final int position) {
-
         final FolderEntity task = (FolderEntity)mFolderList.get(position);
         holder.binding.setFolder(mFolderList.get(position));
 
@@ -108,11 +100,11 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
         holder.binding.swipeItem.setRightSwipeEnabled(true);
         // Drag From Left
         holder.binding.swipeItem.addDrag(SwipeLayout.DragEdge.Right, holder.binding.swipeItem.findViewById(R.id.linear_swipe));
-        if(task.getFrom().equalsIgnoreCase(ADD_TASK)){
+        if(task != null && TextUtils.isEmpty(task.getFolderName())){
             holder.binding.imgFolder.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_task));
             holder.binding.txtSeenInbox.setVisibility(View.GONE);
             holder.binding.txtUnseenInbox.setVisibility(View.GONE);
-        }else if(task.getFrom().equalsIgnoreCase(ADD_FOLDER)){
+        }else if(task != null && !TextUtils.isEmpty(task.getFolderName())){
             holder.binding.imgFolder.setColorFilter(new PorterDuffColorFilter(task.getColor(), PorterDuff.Mode.SRC_IN));
             holder.binding.txtSeenInbox.setVisibility(View.VISIBLE);
             holder.binding.txtUnseenInbox.setVisibility(View.VISIBLE);
@@ -122,13 +114,20 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (task.getFrom().equalsIgnoreCase(ADD_FOLDER)) {
+                        if (task != null && !TextUtils.isEmpty(task.getFolderName())) {
                             Bundle bundle = new Bundle();
                             if(task != null && !TextUtils.isEmpty(task.getFolderName())){
                                 bundle.putString(TITLE, task.getFolderName());
                             }
                             bundle.putParcelable(FOLDER_OBJ, task);
-                            ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
+                            if(activity instanceof FolderDetailsActivity){
+                                FolderDetailsFragment fragment = new FolderDetailsFragment();
+                                fragment.setArguments(bundle);
+                                (new FolderDetailsActivity()).addFragment(fragment);
+
+                            }else {
+                                ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
+                            }
                         } else {
                             Bundle bundle = new Bundle();
                             if(task != null && task.getTaskDetails() != null

@@ -3,7 +3,6 @@ package com.b2b.sampleb2b.db.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -27,7 +26,7 @@ public class FolderEntity implements Folder, Parcelable {
     @ColumnInfo(name = "Color")
     private int color;
     @ColumnInfo(name = "InsertedFrom")
-    private String from ;
+    private String insertedFrom;
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "TaskDetails")
     private List<AddTaskDetails> taskDetails;
@@ -41,7 +40,7 @@ public class FolderEntity implements Folder, Parcelable {
         id = in.readInt();
         folderName = in.readString();
         color = in.readInt();
-        from = in.readString();
+        insertedFrom = in.readString();
         taskDetails = in.createTypedArrayList(AddTaskDetails.CREATOR);
     }
 
@@ -69,8 +68,8 @@ public class FolderEntity implements Folder, Parcelable {
         this.color = color;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setInsertedFrom(String insertedFrom) {
+        this.insertedFrom = insertedFrom;
     }
 
     public void setTaskDetails(List<AddTaskDetails> taskDetails) {
@@ -97,8 +96,8 @@ public class FolderEntity implements Folder, Parcelable {
     }
 
     @Override
-    public String getFrom() {
-        return from;
+    public String getInsertedFrom() {
+        return insertedFrom;
     }
 
     @Override
@@ -121,7 +120,7 @@ public class FolderEntity implements Folder, Parcelable {
         dest.writeInt(id);
         dest.writeString(folderName);
         dest.writeInt(color);
-        dest.writeString(from);
+        dest.writeString(insertedFrom);
         dest.writeTypedList(taskDetails);
     }
 }

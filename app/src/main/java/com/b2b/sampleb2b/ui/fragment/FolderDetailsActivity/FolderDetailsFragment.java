@@ -1,9 +1,13 @@
 package com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +16,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -39,15 +42,11 @@ import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
-import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
-import com.b2b.sampleb2b.utils.ApplicationUtils;
+import com.b2b.sampleb2b.viewModel.FolderViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by cso on 21/4/18.
@@ -77,7 +76,31 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         return binding.getRoot();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final FolderViewModel viewModel =
+                ViewModelProviders.of(this).get(FolderViewModel.class);
+
+        subscribeUi(viewModel);
+    }
+
+    private void subscribeUi(FolderViewModel viewModel){
+        viewModel.getAllFoldersByName(title).observe(this, new Observer<List<FolderEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<FolderEntity> folderEntities) {
+                if(folderEntities != null && folderEntities.size() > 0){
+                    customFolderTaskAdapter.setFolderList(folderEntities);
+                }
+                binding.executePendingBindings();
+            }
+        });
+    }
+
     private void initializeResources() {
+        if(context == null){
+            context = MyTaskApp.getInstance();
+        }
         Bundle bundle = this.getArguments();
         if(bundle != null){
             if(bundle.containsKey(TITLE)){
@@ -111,6 +134,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         final EditText edtFolderName = (EditText) dialog.findViewById(R.id.edt_folder_name);
         TextView txtSave = (TextView) dialog.findViewById(R.id.txt_save);
         final TextView txtCancel = (TextView) dialog.findViewById(R.id.txt_cancel);
+        AppCompatImageView imgFolder = (AppCompatImageView) dialog.findViewById(R.id.img_title_folder);
         gridviewAdapter = new GridviewAdapter(getActivity(), mColours);
         gridView.setAdapter(gridviewAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,6 +143,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                         gridviewAdapter.setSelectedPosition(position);
                         gridviewAdapter.notifyDataSetChanged();
                         folderColor = mColours[position];
+                        imgFolder.setColorFilter(new PorterDuffColorFilter(folderColor, PorterDuff.Mode.SRC_IN));
                     }
                 });
 
@@ -141,7 +166,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                         subFolderEntity.setParentFolder(title);
                         subFolderEntity.setChildFolder(folderName);
 
-                        folderTask.setFrom(title);
+                        folderTask.setInsertedFrom(title);
                         folderTask.setFolderName(folderName);
                         folderTask.setColor(folderColor);
                         list.add(folderTask);
@@ -214,17 +239,17 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                             AddTaskDetails taskDetailsEntity = new AddTaskDetails();
                             List<AddTaskDetails> entityList = new ArrayList<>();
                             taskDetailsEntity.setTaskName(task_name);
-                            folderTask.setFrom(title);
+                            folderTask.setInsertedFrom(title);
                             entityList.add(taskDetailsEntity);
                             folderTask.setTaskDetails(entityList);
                             list.add(folderTask);
-                            customFolderTaskAdapter.setFolderList(list);
                             MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                             AppExecutors appExecutors = new AppExecutors();
                             appExecutors.getExeDiskIO().execute(()->{
                                 database.getFolderDao().insertAllFolder(list);
                                 Log.e(TAG, "Data Inserted in Folder Table-- Task Column");
                             });
+                            customFolderTaskAdapter.setFolderList(list);
 
                         } else {
                             Toast.makeText(getActivity(), "Enter Task Name", Toast.LENGTH_SHORT).show();

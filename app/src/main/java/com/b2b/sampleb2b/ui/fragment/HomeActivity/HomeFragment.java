@@ -41,12 +41,11 @@ import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
+import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.viewModel.FolderViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 /**
  * Created by root on 19/4/18.
@@ -65,6 +64,8 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     private IEditDeletePopup        iEditDeletePopup;
     private FragementHomeBinding    mBinding;
     private CustomFolderTaskAdapter customFolderTaskAdapter;
+    private MyTaskDatabase          database    ;
+    private AppExecutors            appExecutors;
 
     @Nullable
     @Override
@@ -77,10 +78,12 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     }
 
     private void initializeResources() {
-        mColours = getResources().getIntArray(R.array.colours);
-        context = getActivity();
-        task_list = new ArrayList<>();
-        list = new ArrayList<>();
+        context          = MyTaskApp.getInstance();
+        database         = ((MyTaskApp) context.getApplicationContext()).getDatabase();
+        appExecutors     = new AppExecutors();
+        mColours         = getResources().getIntArray(R.array.colours);
+        task_list        = new ArrayList<>();
+        list             = new ArrayList<>();
         iEditDeletePopup = (IEditDeletePopup) this;
         mBinding.footer.imgAddTask.setOnClickListener(this);
         mBinding.footer.txtNewFolder.setOnClickListener(this);
@@ -99,7 +102,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
 
     private void subscribeUi(FolderViewModel viewModel) {
         // Update the list when the data changes
-        viewModel.getAllFolders().observe(this, new Observer<List<FolderEntity>>() {
+        viewModel.getAllFoldersByName(FROM_HOME_FRAGMENT).observe(this, new Observer<List<FolderEntity>>() {
             @Override
             public void onChanged(@Nullable List<FolderEntity> myProducts) {
                 if (myProducts != null) {
@@ -161,15 +164,20 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                         list.clear();
                     }
                     FolderEntity folderTask = new FolderEntity();
-                    folderTask.setFrom(ADD_FOLDER);
+                    FolderTask task = new FolderTask();
+                    List<FolderTask> folderTaskList = new ArrayList<>();
+                    folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
+                    task.setFrom(FROM_HOME_FRAGMENT);
+                    task.setFolderName(folderName);
+                    task.setColor(folderColor);
+                    folderTaskList.add(task);
+                    folderTask.setFolderTaskList(folderTaskList);
                     list.add(folderTask);
-                    customFolderTaskAdapter.setFolderList(list);
-                    MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
-                    AppExecutors appExecutors = new AppExecutors();
                     appExecutors.getExeDiskIO().execute(()->{
-                        database.getFolderDao().insertAllFolder(list);
+                        database.getFolderDao().insertFolder(folderTask);
+                        customFolderTaskAdapter.setFolderList(list);
                         Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                     });
 
@@ -213,9 +221,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
 
                             task_list.add(task_name);
                             dialog.dismiss();
-                            getActivity()
-                                    .getWindow()
-                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                             if(!list.isEmpty()){
                                 list.clear();
                             }
@@ -223,7 +229,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                             AddTaskDetails taskDetailsEntity = new AddTaskDetails();
                             List<AddTaskDetails> entityList = new ArrayList<>();
                             taskDetailsEntity.setTaskName(task_name);
-                            folderTask.setFrom(ADD_TASK);
+                            folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                             entityList.add(taskDetailsEntity);
                             folderTask.setTaskDetails(entityList);
                             list.add(folderTask);

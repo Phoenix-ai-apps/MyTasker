@@ -59,16 +59,11 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
     }
 
     private void initializeResources() {
-        Bundle bundle = this.getIntent().getExtras();
-        String title = bundle.getString(TITLE);
-        binding.includeToolbar.txtToolbarTitle.setText(title);
-
+       // binding.includeToolbar.txtToolbarTitle.setText(title);
         binding.includeToolbar.imgBackArrow.setOnClickListener(this);
         binding.includeToolbar.aivShare.setOnClickListener(this);
         binding.includeToolbar.imgFilter.setOnClickListener(this);
-
-        addFragment(new FolderDetailsFragment());
-
+        binding.includeToolbar.setFolder(folderEntity);
         //Find bottom Sheet ID
         View bottomSheet = findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -122,18 +117,19 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
         listFilter.add("Filter 5");
         listFilter.add("Filter 6");
         filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
-
         binding.incFilter.cmnRecView.recyclerview.setAdapter(filterBottomDialogAdapter);
+        Bundle bundle = new Bundle();
+        bundle.putString(TITLE, title);
+        bundle.putParcelable(FOLDER_OBJ, folderEntity);
+        FolderDetailsFragment fragment = new FolderDetailsFragment();
+        fragment.setArguments(bundle);
+        addFragment(fragment);
     }
 
 
-    private void addFragment(Fragment fragment) {
+    public void addFragment(Fragment fragment) {
          FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-         Bundle bundle = new Bundle();
-         bundle.putString(TITLE, title);
-         bundle.putParcelable(FOLDER_OBJ, folderEntity);
-         fragment.setArguments(bundle);
-         transaction.replace(R.id.frameLayout_main, fragment);
+         transaction.replace(R.id.frameLayout_main, fragment).addToBackStack(null);
          transaction.commitAllowingStateLoss();
     }
 
