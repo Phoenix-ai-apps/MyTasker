@@ -19,9 +19,12 @@ public interface SubFolderDao {
     @Query("Select * from SubFolder")
     LiveData<List<SubFolderEntity>> loadAllSubFolders();
 
+    @Query("Select * from SubFolder where childFolder=:child")
+    SubFolderEntity getDataFromChildFolder(String child);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllSubFolder(List<SubFolderEntity> folderEntities);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertSubFolder(SubFolderEntity folderEntitie);
+    void insertSubFolder(SubFolderEntity folderEntity);
 }

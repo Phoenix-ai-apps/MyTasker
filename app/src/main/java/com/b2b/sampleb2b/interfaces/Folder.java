@@ -13,7 +13,7 @@ public interface Folder {
     String               getFolderName();
     int                  getColor();
     String getInsertedFrom();
-    List<AddTaskDetails> getTaskDetails();
+    AddTaskDetails       getTaskDetails();
     List<FolderTask>     getFolderTaskList();
 
 }

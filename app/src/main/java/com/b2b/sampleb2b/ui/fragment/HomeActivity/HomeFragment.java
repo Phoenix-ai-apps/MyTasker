@@ -10,7 +10,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
@@ -31,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.b2b.sampleb2b.AppExecutors;
+import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.CustomFolderTaskAdapter;
@@ -43,7 +46,6 @@ import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
 import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.viewModel.FolderViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,11 +64,11 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     private Context                 context;
     public  GridviewAdapter         gridviewAdapter;
     private IEditDeletePopup        iEditDeletePopup;
-    private FragementHomeBinding    mBinding;
     private CustomFolderTaskAdapter customFolderTaskAdapter;
     private MyTaskDatabase          database    ;
     private AppExecutors            appExecutors;
-
+    private FragementHomeBinding    mBinding;
+    private List<FolderEntity>      folderEntities;
     @Nullable
     @Override
     public View onCreateView(
@@ -107,6 +109,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
             public void onChanged(@Nullable List<FolderEntity> myProducts) {
                 if (myProducts != null) {
                     mBinding.setIsLoading(false);
+                    folderEntities = myProducts;
                     customFolderTaskAdapter.setFolderList(myProducts);
                 } else {
                     mBinding.setIsLoading(true);
@@ -120,7 +123,6 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
 
     public void onClickNewFolder() {
         folderColor = mColours[0];
-
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_new_folder);
@@ -136,7 +138,8 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         final EditText edtFolderName = (EditText) dialog.findViewById(R.id.edt_folder_name);
         TextView txtSave             = (TextView) dialog.findViewById(R.id.txt_save);
         AppCompatImageView imgFolder = (AppCompatImageView) dialog.findViewById(R.id.img_title_folder);
-        final TextView txtCancel     = (TextView) dialog.findViewById(R.id.txt_cancel);
+        final TextView  txtCancel    = (TextView) dialog.findViewById(R.id.txt_cancel);
+        TextInputLayout inputName    = (TextInputLayout) dialog.findViewById(R.id.input_name);
 
         gridviewAdapter = new GridviewAdapter(getActivity(), mColours);
         gridView.setAdapter(gridviewAdapter);
@@ -164,22 +167,24 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                         list.clear();
                     }
                     FolderEntity folderTask = new FolderEntity();
-                    FolderTask task = new FolderTask();
-                    List<FolderTask> folderTaskList = new ArrayList<>();
                     folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
-                    task.setFrom(FROM_HOME_FRAGMENT);
-                    task.setFolderName(folderName);
-                    task.setColor(folderColor);
-                    folderTaskList.add(task);
-                    folderTask.setFolderTaskList(folderTaskList);
                     list.add(folderTask);
                     appExecutors.getExeDiskIO().execute(()->{
-                        database.getFolderDao().insertFolder(folderTask);
-                        customFolderTaskAdapter.setFolderList(list);
-                        Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
+                        FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName);
+                        if(entityFromDB == null){
+                            database.getFolderDao().insertAllFolder(list);
+                            Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
+                            onUiThread(false);
+                        }else {
+                            if(entityFromDB != null && !TextUtils.isEmpty(entityFromDB.getFolderName())){
+                              onUiThread(true);
+                            }
+                        }
                     });
+
+                // customFolderTaskAdapter.setFolderList(list);
 
                 } else {
                     Toast.makeText(getActivity(), "Enter FolderTask Name", Toast.LENGTH_SHORT).show();
@@ -191,6 +196,23 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+    }
+
+    private void onUiThread(boolean flag, String from){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(true){
+                    if(from.equalsIgnoreCase(FOLDER)){
+                        Toast.makeText(getActivity(), "Folder with this name already exists", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getActivity(), "Task with this name already exists", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    customFolderTaskAdapter.setFolderList(list);
+                }
             }
         });
     }
@@ -227,11 +249,9 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                             }
                             FolderEntity folderTask = new FolderEntity();
                             AddTaskDetails taskDetailsEntity = new AddTaskDetails();
-                            List<AddTaskDetails> entityList = new ArrayList<>();
                             taskDetailsEntity.setTaskName(task_name);
                             folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
-                            entityList.add(taskDetailsEntity);
-                            folderTask.setTaskDetails(entityList);
+                            folderTask.setTaskDetails(taskDetailsEntity);
                             list.add(folderTask);
                             customFolderTaskAdapter.setFolderList(list);
                             MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
@@ -239,6 +259,18 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                             appExecutors.getExeDiskIO().execute(()->{
                                 database.getFolderDao().insertAllFolder(list);
                                 Log.e(TAG, "Data Inserted in Folder Table-- Task Column");
+                                FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(task_name);
+                                if(entityFromDB == null){
+                                    database.getFolderDao().insertAllFolder(list);
+                                    onUiThread(false, TASK);
+                                    Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
+                                }else {
+                                    if(entityFromDB != null && entityFromDB.getTaskDetails() != null
+                                            && entityFromDB.getTaskDetails().getTaskName().equalsIgnoreCase(task_name)){
+                                        onUiThread(true, TASK);
+                                    }
+                                }
+
                             });
 
 

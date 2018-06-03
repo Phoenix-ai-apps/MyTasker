@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 
+import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
@@ -17,14 +18,15 @@ import java.util.List;
 public class SubFolderViewModel extends AndroidViewModel {
 
   private final MediatorLiveData<List<SubFolderEntity>> liveData;
+  private DataRepository dataRepository;
 
   public SubFolderViewModel(Application application){
       super(application);
       liveData = new MediatorLiveData<>();
+      dataRepository = ((MyTaskApp) application).getDataRepository();
       // set by default null, until we get data from the database.
       liveData.setValue(null);
-      LiveData<List<SubFolderEntity>> listLiveData =
-              ((MyTaskApp) application).getDataRepository().getAllSubFolder();
+      LiveData<List<SubFolderEntity>> listLiveData = dataRepository.getAllSubFolder();
       liveData.addSource(listLiveData, liveData::setValue);
   }
 

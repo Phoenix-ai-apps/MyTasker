@@ -29,19 +29,19 @@ public class FolderEntity implements Folder, Parcelable {
     private String insertedFrom;
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "TaskDetails")
-    private List<AddTaskDetails> taskDetails;
+    private AddTaskDetails taskDetails;
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "FolderTaskList")
     private List<FolderTask>     folderTaskList;
 
     public FolderEntity(){}
 
-    public FolderEntity(Parcel in) {
+    protected FolderEntity(Parcel in) {
         id = in.readInt();
         folderName = in.readString();
         color = in.readInt();
         insertedFrom = in.readString();
-        taskDetails = in.createTypedArrayList(AddTaskDetails.CREATOR);
+        taskDetails = in.readParcelable(AddTaskDetails.class.getClassLoader());
     }
 
     public static final Creator<FolderEntity> CREATOR = new Creator<FolderEntity>() {
@@ -72,7 +72,7 @@ public class FolderEntity implements Folder, Parcelable {
         this.insertedFrom = insertedFrom;
     }
 
-    public void setTaskDetails(List<AddTaskDetails> taskDetails) {
+    public void setTaskDetails(AddTaskDetails taskDetails) {
         this.taskDetails = taskDetails;
     }
 
@@ -101,7 +101,7 @@ public class FolderEntity implements Folder, Parcelable {
     }
 
     @Override
-    public List<AddTaskDetails> getTaskDetails() {
+    public AddTaskDetails getTaskDetails() {
         return taskDetails;
     }
 
@@ -121,6 +121,7 @@ public class FolderEntity implements Folder, Parcelable {
         dest.writeString(folderName);
         dest.writeInt(color);
         dest.writeString(insertedFrom);
-        dest.writeTypedList(taskDetails);
+        dest.writeParcelable(taskDetails, flags);
     }
+
 }

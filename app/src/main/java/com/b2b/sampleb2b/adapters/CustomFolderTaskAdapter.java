@@ -5,6 +5,8 @@ import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,7 +37,7 @@ import java.util.Objects;
 public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTaskAdapter.RecyclerViewHolders> implements AllConstants {
 
     //private List<FolderTask> list = new ArrayList<>();
-    private Activity activity;
+    private AppCompatActivity activity;
     private IEditDeletePopup iEditDeletePopup;
     List<? extends Folder> mFolderList;
 
@@ -82,7 +84,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
 
     @Override
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        activity = (Activity) parent.getContext();
+        activity = (AppCompatActivity) parent.getContext();
         TemplateTaskFolderItemBinding binding =
                 DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.template_task_folder_item, parent,
                         false);
@@ -123,8 +125,10 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                             if(activity instanceof FolderDetailsActivity){
                                 FolderDetailsFragment fragment = new FolderDetailsFragment();
                                 fragment.setArguments(bundle);
-                                (new FolderDetailsActivity()).addFragment(fragment);
-
+                                ((FolderDetailsActivity) activity).binding.includeToolbar.setFolder(task);
+                                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.frameLayout_main, fragment).addToBackStack(null);
+                                transaction.commitAllowingStateLoss();
                             }else {
                                 ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
                             }

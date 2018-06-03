@@ -8,23 +8,15 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.b2b.sampleb2b.AppExecutors;
-import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
@@ -39,9 +31,6 @@ import com.b2b.sampleb2b.receiver.TaskAlarmReceiver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by root on 20/4/18.
@@ -67,7 +56,6 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
     }
 
     private void initializeResources() {
-
         Bundle bundle = this.getIntent().getExtras();
         String title = "";
         if(bundle.containsKey(TITLE)){

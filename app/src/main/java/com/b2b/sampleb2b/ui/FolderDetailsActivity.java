@@ -38,7 +38,7 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
     private LinearLayoutManager mLayoutManager;
     private String title;
     private FolderEntity folderEntity;
-    private ActivityFolderDetailsBinding binding;
+    public ActivityFolderDetailsBinding binding;
     private FilterBottomDialogAdapter filterBottomDialogAdapter;
 
     @Override
