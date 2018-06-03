@@ -64,8 +64,8 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         }
         if(bundle.containsKey(FOLDER_OBJ)){
             folderEntity = bundle.getParcelable(FOLDER_OBJ);
-            if(folderEntity.getTaskDetails() != null && folderEntity.getTaskDetails().size() > 0){
-                addTaskDetails = folderEntity.getTaskDetails().get(0);
+            if(folderEntity.getTaskDetails() != null ){
+                addTaskDetails = folderEntity.getTaskDetails();
                 taskBinding.setTaskDetails(addTaskDetails);
             }
         }
@@ -238,9 +238,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                    // addTaskDetails.setTaskRepeatMode(taskBinding.txtRepeatMode.getText().toString().trim());
                     addTaskDetails.setTaskNote(taskBinding.edtTaskNote.getText().toString().trim()   );
                     addTaskDetails.setTaskPriority(String.valueOf(prorityType));
-                    List<AddTaskDetails> taskDetailsList = new ArrayList<>();
-                    taskDetailsList.add(addTaskDetails);
-                    folderEntity.setTaskDetails(taskDetailsList);
+                    folderEntity.setTaskDetails(addTaskDetails);
                     AppExecutors appExecutors = new AppExecutors();
                     appExecutors.getExeDiskIO().execute(()->{
                         MyTaskDatabase database = ((MyTaskApp)getApplicationContext()).getDatabase();

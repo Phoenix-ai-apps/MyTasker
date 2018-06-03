@@ -36,9 +36,9 @@ public class BindingAdapters {
         String name = "";
         if(folder != null && !TextUtils.isEmpty(folder.getFolderName())){
             name = folder.getFolderName();
-        }else if(folder.getTaskDetails() != null && folder.getTaskDetails().size() > 0
-                && !TextUtils.isEmpty(folder.getTaskDetails().get(0).getTaskName())){
-            name = folder.getTaskDetails().get(0).getTaskName();
+        }else if(folder.getTaskDetails() != null
+                && !TextUtils.isEmpty(folder.getTaskDetails().getTaskName())){
+            name = folder.getTaskDetails().getTaskName();
         }
         ((TextView) view).setText(name);
     }
@@ -46,9 +46,9 @@ public class BindingAdapters {
     @BindingAdapter("folderTaskSize")
     public static void setFolderTaskSize(View view, Folder folder) {
         int size = 0;
-        if(folder.getTaskDetails() != null && folder.getTaskDetails().size() > 0){
-            size = folder.getTaskDetails().size();
-        }
+      /*  if(folder.getTaskDetails() != null ){
+            size = folder.getTaskDetails();
+        }*/
         ((TextView) view).setText(""+size);
     }
 
