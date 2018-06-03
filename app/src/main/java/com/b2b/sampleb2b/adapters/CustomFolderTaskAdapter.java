@@ -135,9 +135,8 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                         } else {
                             Bundle bundle = new Bundle();
                             if(task != null && task.getTaskDetails() != null
-                                    && task.getTaskDetails().size() > 0
-                                    && !TextUtils.isEmpty(task.getTaskDetails().get(0).getTaskName())){
-                                bundle.putString(TITLE, task.getTaskDetails().get(0).getTaskName());
+                                    && !TextUtils.isEmpty(task.getTaskDetails().getTaskName())){
+                                bundle.putString(TITLE, task.getTaskDetails().getTaskName());
                             }
                             bundle.putParcelable(FOLDER_OBJ, task);
                             ApplicationUtils.startActivityIntent(activity, AddTaskActivity.class, bundle);

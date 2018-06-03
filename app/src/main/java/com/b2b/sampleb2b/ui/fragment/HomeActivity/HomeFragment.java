@@ -176,10 +176,10 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                         if(entityFromDB == null){
                             database.getFolderDao().insertAllFolder(list);
                             Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
-                            onUiThread(false);
+                            onUiThread(false, FOLDER);
                         }else {
                             if(entityFromDB != null && !TextUtils.isEmpty(entityFromDB.getFolderName())){
-                              onUiThread(true);
+                              onUiThread(true, FOLDER);
                             }
                         }
                     });
