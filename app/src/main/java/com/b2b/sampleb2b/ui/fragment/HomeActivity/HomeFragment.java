@@ -42,6 +42,7 @@ import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.FragementHomeBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
 import com.b2b.sampleb2b.models.FolderTask;
@@ -104,7 +105,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
 
     private void subscribeUi(FolderViewModel viewModel) {
         // Update the list when the data changes
-        viewModel.getAllFoldersByName(FROM_HOME_FRAGMENT).observe(this, new Observer<List<FolderEntity>>() {
+        viewModel.getAllFoldersByInsertedFolder(FROM_HOME_FRAGMENT).observe(this, new Observer<List<FolderEntity>>() {
             @Override
             public void onChanged(@Nullable List<FolderEntity> myProducts) {
                 if (myProducts != null) {
@@ -172,7 +173,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     folderTask.setColor(folderColor);
                     list.add(folderTask);
                     appExecutors.getExeDiskIO().execute(()->{
-                        FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName);
+                        FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName, FROM_HOME_FRAGMENT);
                         if(entityFromDB == null){
                             database.getFolderDao().insertAllFolder(list);
                             Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
@@ -196,23 +197,6 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-            }
-        });
-    }
-
-    private void onUiThread(boolean flag, String from){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(true){
-                    if(from.equalsIgnoreCase(FOLDER)){
-                        Toast.makeText(getActivity(), "Folder with this name already exists", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), "Task with this name already exists", Toast.LENGTH_LONG).show();
-                    }
-                }else {
-                    customFolderTaskAdapter.setFolderList(list);
-                }
             }
         });
     }
@@ -248,25 +232,29 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                                 list.clear();
                             }
                             FolderEntity folderTask = new FolderEntity();
-                            AddTaskDetails taskDetailsEntity = new AddTaskDetails();
-                            taskDetailsEntity.setTaskName(task_name);
+                            AddTaskDetails addTaskDetails = new AddTaskDetails();
+                            addTaskDetails.setTaskName(task_name);
+                            addTaskDetails.setParentColumn(FROM_HOME_FRAGMENT);
                             folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
-                            folderTask.setTaskDetails(taskDetailsEntity);
+                            folderTask.setTaskDetails(addTaskDetails);
                             list.add(folderTask);
-                            customFolderTaskAdapter.setFolderList(list);
+
+                            TaskDetailsEntity taskDetailsEntity = new TaskDetailsEntity();
+                            taskDetailsEntity.setTaskName(task_name);
+                            taskDetailsEntity.setParentColumn(FROM_HOME_FRAGMENT);
+
                             MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                             AppExecutors appExecutors = new AppExecutors();
                             appExecutors.getExeDiskIO().execute(()->{
-                                database.getFolderDao().insertAllFolder(list);
-                                Log.e(TAG, "Data Inserted in Folder Table-- Task Column");
-                                FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(task_name);
+                                TaskDetailsEntity entityFromDB =
+                                        DataRepository.getDataRepository(database).getTaskByName(task_name, FROM_HOME_FRAGMENT);
                                 if(entityFromDB == null){
                                     database.getFolderDao().insertAllFolder(list);
+                                    database.getTaskDetailsDao().insertTaskDetails(taskDetailsEntity);
                                     onUiThread(false, TASK);
                                     Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                                 }else {
-                                    if(entityFromDB != null && entityFromDB.getTaskDetails() != null
-                                            && entityFromDB.getTaskDetails().getTaskName().equalsIgnoreCase(task_name)){
+                                    if(entityFromDB != null && entityFromDB.getTaskName().equalsIgnoreCase(task_name)){
                                         onUiThread(true, TASK);
                                     }
                                 }
@@ -287,6 +275,23 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                         dialog.dismiss();
                     }
                 });
+    }
+
+    private void onUiThread(boolean flag, String from){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(flag){
+                    if(from.equalsIgnoreCase(FOLDER)){
+                        Toast.makeText(getActivity(), "Folder with this name already exists", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getActivity(), "Task with this name already exists", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    customFolderTaskAdapter.setFolderList(list);
+                }
+            }
+        });
     }
 
     @Override

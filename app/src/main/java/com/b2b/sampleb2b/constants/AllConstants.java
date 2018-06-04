@@ -5,7 +5,7 @@ package com.b2b.sampleb2b.constants;
  */
 
 public interface AllConstants {
-    int    DATABASE_VERSION   = 1;
+    int    DATABASE_VERSION   = 3;
     String DATABASE_NAME      = "myTask.db";
     String TITLE              = "title";
     String ADD_TASK           = "task";

@@ -34,8 +34,8 @@ public interface FolderDao {
     @Update
     int updateFolderTask(FolderEntity folderEntity);
 
-    @Query("Select * from AllFolder where Folder=:from")
-    FolderEntity getFolderByFrom(String from);
+    @Query("Select * from AllFolder where Folder=:name and InsertedFrom=:parentFolder")
+    FolderEntity getFolderByFrom(String name, String parentFolder);
 
     @Query("Select * from AllFolder where TaskDetails=:taskName")
     FolderEntity getFolderByTask(String taskName);

@@ -20,6 +20,7 @@ public class TaskDetailsEntity implements TaskDetails{
     private String  taskNote;
     private String  taskPriority;
     private boolean isDateGone;
+    private String  parentColumn;
 
     public void setDateGone(boolean dateGone) {
         isDateGone = dateGone;
@@ -51,6 +52,15 @@ public class TaskDetailsEntity implements TaskDetails{
 
     public void setTaskPriority(String taskPriority) {
         this.taskPriority = taskPriority;
+    }
+
+    public void setParentColumn(String parentColumn) {
+        this.parentColumn = parentColumn;
+    }
+
+    @Override
+    public String getParentColumn() {
+        return parentColumn;
     }
 
     @Override
@@ -97,7 +107,8 @@ public class TaskDetailsEntity implements TaskDetails{
     public TaskDetailsEntity(){}
 
     public TaskDetailsEntity(int taskId,String taskName, String taskDate, String taskTime,
-                             String taskRepeatMode, String taskNote, String taskPriority, boolean isDateGone){
+                             String taskRepeatMode, String taskNote, String taskPriority,
+                             boolean isDateGone, String parentColumn){
         this.taskId         = taskId;
         this.taskName       = taskName;
         this.taskDate       = taskDate;
@@ -106,6 +117,7 @@ public class TaskDetailsEntity implements TaskDetails{
         this.taskNote       = taskNote;
         this.taskPriority   = taskPriority;
         this.isDateGone     = isDateGone;
+        this.parentColumn   = parentColumn;
     }
 
     public TaskDetailsEntity(TaskDetails taskDetails){
@@ -117,5 +129,6 @@ public class TaskDetailsEntity implements TaskDetails{
         this.taskNote       = taskDetails.getTaskNote();
         this.taskPriority   = taskDetails.getTaskPriority();
         this.isDateGone     = taskDetails.getDateGone();
+        this.parentColumn   = taskDetails.getParentColumn();
     }
 }

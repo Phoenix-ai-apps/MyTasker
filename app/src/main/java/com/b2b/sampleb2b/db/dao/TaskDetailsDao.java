@@ -25,4 +25,7 @@ public interface TaskDetailsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTaskDetails(TaskDetailsEntity folderEntitie);
 
+    @Query("Select * from TaskDetails where taskName=:name and parentColumn=:parentFolder")
+    TaskDetailsEntity getTaskByName(String name, String parentFolder);
+
 }

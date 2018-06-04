@@ -11,7 +11,16 @@ public class AddTaskDetails implements Parcelable {
   private String  taskRepeatMode;
   private String  taskNote;
   private String  taskPriority;
+  private String  parentColumn;
   private boolean isDateGone;
+
+  public String getParentColumn() {
+    return parentColumn;
+  }
+
+  public void setParentColumn(String parentColumn) {
+    this.parentColumn = parentColumn;
+  }
 
   public boolean isDateGone() {
     return isDateGone;

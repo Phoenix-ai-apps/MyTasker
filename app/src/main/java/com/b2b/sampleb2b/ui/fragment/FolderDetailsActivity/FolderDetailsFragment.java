@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.b2b.sampleb2b.AppExecutors;
+import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.CustomFolderTaskAdapter;
@@ -41,6 +42,7 @@ import com.b2b.sampleb2b.databinding.FragmentFolderDetailsBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
+import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
 import com.b2b.sampleb2b.viewModel.FolderViewModel;
@@ -86,7 +88,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
     }
 
     private void subscribeUi(FolderViewModel viewModel){
-        viewModel.getAllFoldersByName(title).observe(this, new Observer<List<FolderEntity>>() {
+        viewModel.getAllFoldersByInsertedFolder(title).observe(this, new Observer<List<FolderEntity>>() {
             @Override
             public void onChanged(@Nullable List<FolderEntity> folderEntities) {
                 if(folderEntities != null && folderEntities.size() > 0){
@@ -173,9 +175,9 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                         MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                         AppExecutors appExecutors = new AppExecutors();
                         appExecutors.getExeDiskIO().execute(()->{
-                            database.getSubFolderDao().insertSubFolder(subFolderEntity);
-                            FolderEntity entityFromDB = database.getFolderDao().getFolderByFrom(title);
+                            FolderEntity entityFromDB = database.getFolderDao().getFolderByFrom(folderName, title);
                             if(entityFromDB == null){
+                                database.getSubFolderDao().insertSubFolder(subFolderEntity);
                                 database.getFolderDao().insertAllFolder(list);
                                 onUiThread(false, FOLDER);
                                 Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
@@ -206,7 +208,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(true){
+                if(flag){
                     if(from.equalsIgnoreCase(FOLDER)){
                         Toast.makeText(getActivity(), "Folder with this name already exists", Toast.LENGTH_LONG).show();
                     }else {
@@ -251,30 +253,33 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                                 list.clear();
                             }
                             FolderEntity folderTask = new FolderEntity();
-                            AddTaskDetails taskDetailsEntity = new AddTaskDetails();
-                            taskDetailsEntity.setTaskName(task_name);
+                            AddTaskDetails addTaskDetails = new AddTaskDetails();
+                            addTaskDetails.setTaskName(task_name);
+                            addTaskDetails.setParentColumn(title);
                             folderTask.setInsertedFrom(title);
-                            folderTask.setTaskDetails(taskDetailsEntity);
+                            folderTask.setTaskDetails(addTaskDetails);
                             list.add(folderTask);
+
+                            TaskDetailsEntity taskDetailsEntity = new TaskDetailsEntity();
+                            taskDetailsEntity.setTaskName(task_name);
+                            taskDetailsEntity.setParentColumn(title);
+
                             MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                             AppExecutors appExecutors = new AppExecutors();
                             appExecutors.getExeDiskIO().execute(()->{
-                                database.getFolderDao().insertAllFolder(list);
-                                Log.e(TAG, "Data Inserted in Folder Table-- Task Column");
-                                FolderEntity entityFromDB = database.getFolderDao().getFolderByFrom(title);
+                                TaskDetailsEntity entityFromDB =
+                                        DataRepository.getDataRepository(database).getTaskByName(task_name, title);
                                 if(entityFromDB == null){
                                     database.getFolderDao().insertAllFolder(list);
+                                    database.getTaskDetailsDao().insertTaskDetails(taskDetailsEntity);
                                     onUiThread(false, TASK);
                                     Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                                 }else {
-                                    if(entityFromDB != null && entityFromDB.getTaskDetails() != null
-                                            && entityFromDB.getTaskDetails().getTaskName().equalsIgnoreCase(task_name)){
+                                    if(entityFromDB != null && entityFromDB.getTaskName().equalsIgnoreCase(task_name)){
                                         onUiThread(true, TASK);
                                     }
                                 }
-
                             });
-                            customFolderTaskAdapter.setFolderList(list);
 
                         } else {
                             Toast.makeText(getActivity(), "Enter Task Name", Toast.LENGTH_SHORT).show();

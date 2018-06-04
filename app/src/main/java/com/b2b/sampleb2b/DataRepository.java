@@ -63,8 +63,12 @@ public class DataRepository implements HelperInterface{
         return taskDatabase.getSubFolderDao().loadAllSubFolders();
     }
 
-    public FolderEntity getFolderByName(String name){
-        return taskDatabase.getFolderDao().getFolderByFrom(name);
+    public FolderEntity getFolderByName(String name, String parentFolder){
+        return taskDatabase.getFolderDao().getFolderByFrom(name, parentFolder);
+    }
+
+    public TaskDetailsEntity getTaskByName(String name, String parentFolder){
+        return taskDatabase.getTaskDetailsDao().getTaskByName(name, parentFolder);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.b2b.sampleb2b.AppExecutors;
 import com.b2b.sampleb2b.db.converter.ObjectConverter;
@@ -77,7 +78,7 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
                 })
                 //.fallbackToDestructiveMigration() // This method clear the DB and create new DB from Scratch.
                                                  // So data will be wipedout. --Use this mtd in special scenarios.
-                .addMigrations(MIGRATION_1_2)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build();
     }
@@ -121,8 +122,9 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
     static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE users "
-                    + " ADD COLUMN last_update INTEGER");
+            database.execSQL("ALTER TABLE TaskDetails "
+                    + " ADD COLUMN parentColumn TEXT");
+            Log.e("MY DB", "Migrated to 2_3");
         }
     };
 

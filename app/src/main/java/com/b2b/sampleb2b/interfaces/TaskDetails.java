@@ -11,5 +11,6 @@ public interface TaskDetails {
     String  getTaskRepeatMode();
     String  getTaskNote();
     String  getTaskPriority();
+    String  getParentColumn();
     boolean getDateGone();
 }

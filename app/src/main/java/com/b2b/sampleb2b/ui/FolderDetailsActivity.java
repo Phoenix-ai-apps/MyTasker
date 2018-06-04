@@ -13,14 +13,19 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.b2b.sampleb2b.AppExecutors;
+import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.ActivityFolderDetailsBinding;
+import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
 import com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 
@@ -32,14 +37,16 @@ import butterknife.ButterKnife;
 
 public class FolderDetailsActivity extends AppCompatActivity implements AllConstants, View.OnClickListener {
 
-    private static final String TAG = "FolderDetailsActivity";
-    private BottomSheetBehavior mBottomSheetBehavior;
-    private List<String> listFilter;
-    private LinearLayoutManager mLayoutManager;
-    private String title;
-    private FolderEntity folderEntity;
-    public ActivityFolderDetailsBinding binding;
-    private FilterBottomDialogAdapter filterBottomDialogAdapter;
+    private static final String           TAG = "FolderDetailsActivity";
+    private BottomSheetBehavior           mBottomSheetBehavior;
+    private List<String>                  listFilter;
+    private LinearLayoutManager           mLayoutManager;
+    private String                        title;
+    private FolderEntity                  folderEntity;
+    public ActivityFolderDetailsBinding   binding;
+    private FilterBottomDialogAdapter     filterBottomDialogAdapter;
+    private MyTaskDatabase                database;
+    private AppExecutors                  appExecutors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +66,8 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
     }
 
     private void initializeResources() {
-       // binding.includeToolbar.txtToolbarTitle.setText(title);
+        appExecutors     = new AppExecutors();
+        database         = ((MyTaskApp)getApplicationContext()).getDatabase();
         binding.includeToolbar.imgBackArrow.setOnClickListener(this);
         binding.includeToolbar.aivShare.setOnClickListener(this);
         binding.includeToolbar.imgFilter.setOnClickListener(this);
@@ -135,12 +143,36 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+      //  super.onBackPressed();
+        checkCurrentFolder();
     }
 
     public void backToPrevious(View view) {
-        finish();
+        checkCurrentFolder();
+    }
+
+    private void checkCurrentFolder(){
+        appExecutors.getExeDiskIO().execute(()->{
+            title = binding.includeToolbar.getFolder().getFolderName();
+            SubFolderEntity subFolderEntity = database.getSubFolderDao().getDataFromChildFolder(title);
+            if(subFolderEntity != null && !TextUtils.isEmpty(subFolderEntity.getParentFolder())){
+                FolderEntity folderEntity =
+                        database.getFolderDao().getFolderByFrom(subFolderEntity.getChildFolder(), subFolderEntity.getParentFolder());
+                if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
+                    Bundle bundle = new Bundle();
+                    binding.setFolder(folderEntity);
+                    bundle.putString(TITLE         , subFolderEntity.getParentFolder());
+                    bundle.putParcelable(FOLDER_OBJ, folderEntity);
+                    FolderDetailsFragment fragment = new FolderDetailsFragment();
+                    fragment.setArguments(bundle);
+                    addFragment(fragment);
+                }else {
+                    finish();
+                }
+            }else {
+                finish();
+            }
+        });
     }
 
     @Override
