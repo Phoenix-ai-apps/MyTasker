@@ -55,6 +55,10 @@ public class DataRepository implements HelperInterface{
         return taskDatabase.getFolderDao().getFolderByName(from);
     }
 
+    public LiveData<List<FolderEntity>> getAllFolderListByName(String name){
+        return taskDatabase.getFolderDao().getFolderListByName(name);
+    }
+
     public LiveData<List<TaskDetailsEntity>> getAllTaskDetails(){
         return taskDatabase.getTaskDetailsDao().loadAllTaskDetails();
     }

@@ -22,8 +22,11 @@ public interface FolderDao {
     @Query("Select * from AllFolder where id=:id")
     LiveData<List<FolderEntity>> getFolderById(int id);
 
-    @Query("Select * from AllFolder where insertedFrom=:folderName")
-    LiveData<List<FolderEntity>> getFolderByName(String folderName);
+    @Query("Select * from AllFolder where insertedFrom=:insertedFrom")
+    LiveData<List<FolderEntity>> getFolderByName(String insertedFrom);
+
+    @Query("Select * from AllFolder where Folder=:name")
+    LiveData<List<FolderEntity>> getFolderListByName(String name);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllFolder(List<FolderEntity> folderEntities);
@@ -39,5 +42,8 @@ public interface FolderDao {
 
     @Query("Select * from AllFolder where TaskDetails=:taskName")
     FolderEntity getFolderByTask(String taskName);
+
+    @Query("Select * from AllFolder where Folder=:folderName")
+    FolderEntity getByFolderName(String folderName);
 
 }

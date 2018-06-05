@@ -88,6 +88,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
     }
 
     private void subscribeUi(FolderViewModel viewModel){
+        // getAllFoldersByInsertedFolder(title); || getAllFoldersByFoldeName
         viewModel.getAllFoldersByInsertedFolder(title).observe(this, new Observer<List<FolderEntity>>() {
             @Override
             public void onChanged(@Nullable List<FolderEntity> folderEntities) {

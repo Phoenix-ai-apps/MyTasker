@@ -44,4 +44,13 @@ public class FolderViewModel extends AndroidViewModel {
       liveDataByName.addSource(listLiveDataByName, liveDataByName::setValue);
       return liveDataByName;
   }
+
+    public LiveData<List<FolderEntity>> getAllFoldersByFoldeName(String name){
+        // set by default null, until we get data from the database.
+        liveDataByName.setValue(null);
+        LiveData<List<FolderEntity>> listLiveDataByName = dataRepository.getAllFolderListByName(name);
+        liveDataByName.addSource(listLiveDataByName, liveDataByName::setValue);
+        return liveDataByName;
+    }
+
 }

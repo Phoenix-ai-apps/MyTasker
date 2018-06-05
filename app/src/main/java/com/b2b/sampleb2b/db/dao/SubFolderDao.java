@@ -22,6 +22,9 @@ public interface SubFolderDao {
     @Query("Select * from SubFolder where childFolder=:child")
     SubFolderEntity getDataFromChildFolder(String child);
 
+    @Query("Select * from SubFolder where childFolder=:child and parentFolder=:parent")
+    SubFolderEntity getChildFolderByHome(String child, String parent);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllSubFolder(List<SubFolderEntity> folderEntities);
 

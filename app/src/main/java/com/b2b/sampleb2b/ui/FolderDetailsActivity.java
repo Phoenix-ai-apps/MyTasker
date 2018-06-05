@@ -154,24 +154,26 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
     private void checkCurrentFolder(){
         appExecutors.getExeDiskIO().execute(()->{
             title = binding.includeToolbar.getFolder().getFolderName();
-            SubFolderEntity subFolderEntity = database.getSubFolderDao().getDataFromChildFolder(title);
-            if(subFolderEntity != null && !TextUtils.isEmpty(subFolderEntity.getParentFolder())){
-                FolderEntity folderEntity =
-                        database.getFolderDao().getFolderByFrom(subFolderEntity.getChildFolder(), subFolderEntity.getParentFolder());
-                if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
-                    Bundle bundle = new Bundle();
-                    binding.setFolder(folderEntity);
-                    bundle.putString(TITLE         , subFolderEntity.getParentFolder());
-                    bundle.putParcelable(FOLDER_OBJ, folderEntity);
-                    FolderDetailsFragment fragment = new FolderDetailsFragment();
-                    fragment.setArguments(bundle);
-                    addFragment(fragment);
+            SubFolderEntity entityFromHome = database.getSubFolderDao().getChildFolderByHome(title, FROM_HOME_FRAGMENT);
+                SubFolderEntity subFolderEntity = database.getSubFolderDao().getDataFromChildFolder(title);
+                if(subFolderEntity != null && !TextUtils.isEmpty(subFolderEntity.getParentFolder())){
+                    FolderEntity folderEntity =
+                            database.getFolderDao().getByFolderName(subFolderEntity.getParentFolder());
+                    if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
+                        Bundle bundle = new Bundle();
+                        binding.setFolder(folderEntity);
+                        binding.includeToolbar.setFolder(folderEntity);
+                        bundle.putString(TITLE         , folderEntity.getFolderName());
+                        bundle.putParcelable(FOLDER_OBJ, folderEntity);
+                        FolderDetailsFragment fragment = new FolderDetailsFragment();
+                        fragment.setArguments(bundle);
+                        addFragment(fragment);
+                    }else {
+                        finish();
+                    }
                 }else {
                     finish();
                 }
-            }else {
-                finish();
-            }
         });
     }
 
@@ -184,7 +186,7 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
                 break;
 
             case R.id.img_back_arrow:
-                finish();
+               checkCurrentFolder();
                 break;
 
             case R.id.img_filter:

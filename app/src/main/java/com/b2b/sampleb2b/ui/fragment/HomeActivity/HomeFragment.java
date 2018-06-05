@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -42,10 +41,10 @@ import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.FragementHomeBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.interfaces.IEditDeletePopup;
-import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.viewModel.FolderViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +121,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         });
     }
 
-    public void onClickNewFolder() {
+    public void addFolder() {
         folderColor = mColours[0];
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -172,6 +171,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
                     list.add(folderTask);
+
                     appExecutors.getExeDiskIO().execute(()->{
                         FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName, FROM_HOME_FRAGMENT);
                         if(entityFromDB == null){
@@ -201,7 +201,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         });
     }
 
-    public void onClickAddTask() {
+    public void addTask() {
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -304,11 +304,11 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_add_task:
-                onClickAddTask();
+                addTask();
                 break;
 
             case R.id.txt_new_folder:
-                onClickNewFolder();
+                addFolder();
                 break;
 
             default:
