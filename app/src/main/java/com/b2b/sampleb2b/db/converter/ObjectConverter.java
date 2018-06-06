@@ -2,6 +2,8 @@ package com.b2b.sampleb2b.db.converter;
 
 import android.arch.persistence.room.TypeConverter;
 
+import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.interfaces.Folder;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.models.FolderTask;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
@@ -72,5 +74,14 @@ public class ObjectConverter {
     return date == null ? null : date.getTime();
   }
 
+  @TypeConverter
+  public static String fromFolderEntityListToJson(List<FolderEntity> folderEntities){
+    return ApplicationUtils.toJson(folderEntities);
+  }
+
+  @TypeConverter
+  public static List<FolderEntity> toFolderEntityList(String json){
+    return DeseriallizeUtils.deserializeFolderEntityList(json);
+  }
 
 }

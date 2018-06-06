@@ -1,5 +1,6 @@
 package com.b2b.sampleb2b.utils;
 
+import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.models.FolderTask;
 import com.google.gson.Gson;
@@ -62,6 +63,18 @@ public class DeseriallizeUtils {
         try{
             responseClass = getGsonObject().fromJson(response,
                     new TypeToken<List<FolderTask>>() {
+                    }.getType());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return responseClass;
+    }
+
+    public static List<FolderEntity> deserializeFolderEntityList(String response){
+        List<FolderEntity> responseClass = null;
+        try{
+            responseClass = getGsonObject().fromJson(response,
+                    new TypeToken<List<FolderEntity>>() {
                     }.getType());
         }catch (Exception e){
             e.printStackTrace();

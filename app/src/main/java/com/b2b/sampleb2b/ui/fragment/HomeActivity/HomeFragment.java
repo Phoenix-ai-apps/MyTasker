@@ -40,6 +40,7 @@ import com.b2b.sampleb2b.adapters.GridviewAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.FragementHomeBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
+import com.b2b.sampleb2b.db.entities.FolderCycleFlowEntity;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
@@ -60,7 +61,6 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     int                             folderColor;
     private int[]                   mColours = new int[0];
     private List<String>            task_list;
-    private List<FolderEntity>      list;
     private Context                 context;
     public  GridviewAdapter         gridviewAdapter;
     private IEditDeletePopup        iEditDeletePopup;
@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         appExecutors     = new AppExecutors();
         mColours         = getResources().getIntArray(R.array.colours);
         task_list        = new ArrayList<>();
-        list             = new ArrayList<>();
         iEditDeletePopup = (IEditDeletePopup) this;
         mBinding.footer.imgAddTask.setOnClickListener(this);
         mBinding.footer.txtNewFolder.setOnClickListener(this);
@@ -163,19 +162,27 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     getActivity()
                     .getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                    if(!list.isEmpty()){
-                        list.clear();
-                    }
+
                     FolderEntity folderTask = new FolderEntity();
                     folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
-                    list.add(folderTask);
+
+                    FolderCycleFlowEntity flowEntity = new FolderCycleFlowEntity();
+                    flowEntity.setFolderName(folderName);
+                    List<FolderEntity> entityList = new ArrayList<>();
+                    FolderEntity entity = new FolderEntity();
+                    entity.setFolderName(FROM_HOME_FRAGMENT);
+                    entityList.add(entity);
+                    entityList.add(folderTask);
+                    flowEntity.setFolderEntity(entityList);
 
                     appExecutors.getExeDiskIO().execute(()->{
                         FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName, FROM_HOME_FRAGMENT);
                         if(entityFromDB == null){
-                            database.getFolderDao().insertAllFolder(list);
+                            database.getFolderDao().insertFolder(folderTask);
+                            database.getFolderCycleFlowDao().insertFolderCycleFlow(flowEntity);
+                           // list.add(folderTask);
                             Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                             onUiThread(false, FOLDER);
                         }else {
@@ -224,20 +231,15 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     public void onClick(View view) {
                         String task_name = edtTaskName.getText().toString().trim();
                         if (!TextUtils.isEmpty(task_name)) {
-
                             task_list.add(task_name);
                             dialog.dismiss();
                             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                            if(!list.isEmpty()){
-                                list.clear();
-                            }
                             FolderEntity folderTask = new FolderEntity();
                             AddTaskDetails addTaskDetails = new AddTaskDetails();
                             addTaskDetails.setTaskName(task_name);
                             addTaskDetails.setParentColumn(FROM_HOME_FRAGMENT);
                             folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                             folderTask.setTaskDetails(addTaskDetails);
-                            list.add(folderTask);
 
                             TaskDetailsEntity taskDetailsEntity = new TaskDetailsEntity();
                             taskDetailsEntity.setTaskName(task_name);
@@ -249,8 +251,9 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                                 TaskDetailsEntity entityFromDB =
                                         DataRepository.getDataRepository(database).getTaskByName(task_name, FROM_HOME_FRAGMENT);
                                 if(entityFromDB == null){
-                                    database.getFolderDao().insertAllFolder(list);
+                                    database.getFolderDao().insertFolder(folderTask);
                                     database.getTaskDetailsDao().insertTaskDetails(taskDetailsEntity);
+                                   // list.add(folderTask);
                                     onUiThread(false, TASK);
                                     Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                                 }else {
@@ -287,8 +290,8 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     }else {
                         Toast.makeText(getActivity(), "Task with this name already exists", Toast.LENGTH_LONG).show();
                     }
-                }else {
-                    customFolderTaskAdapter.setFolderList(list);
+                }else{
+                  // customFolderTaskAdapter.setFolderList(list);
                 }
             }
         });

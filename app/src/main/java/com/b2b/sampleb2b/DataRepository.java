@@ -4,12 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 
 import com.b2b.sampleb2b.db.MyTaskDatabase;
+import com.b2b.sampleb2b.db.entities.FolderCycleFlowEntity;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.helper.ApplicationHelper;
 import com.b2b.sampleb2b.helper.HelperInterface;
-import com.b2b.sampleb2b.interfaces.TaskDetails;
 
 import java.util.List;
 
@@ -73,6 +73,11 @@ public class DataRepository implements HelperInterface{
 
     public TaskDetailsEntity getTaskByName(String name, String parentFolder){
         return taskDatabase.getTaskDetailsDao().getTaskByName(name, parentFolder);
+    }
+
+    public List<FolderEntity> getFolderEntFromFolderCycleByName(String name){
+        FolderCycleFlowEntity cycleFlowEntity = taskDatabase.getFolderCycleFlowDao().getFolderCycleFlowByName(name);
+        return cycleFlowEntity.getFolderEntity();
     }
 
     @Override

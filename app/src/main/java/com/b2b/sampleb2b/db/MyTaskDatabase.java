@@ -14,9 +14,11 @@ import android.util.Log;
 
 import com.b2b.sampleb2b.AppExecutors;
 import com.b2b.sampleb2b.db.converter.ObjectConverter;
+import com.b2b.sampleb2b.db.dao.FolderCycleFlowDao;
 import com.b2b.sampleb2b.db.dao.FolderDao;
 import com.b2b.sampleb2b.db.dao.SubFolderDao;
 import com.b2b.sampleb2b.db.dao.TaskDetailsDao;
+import com.b2b.sampleb2b.db.entities.FolderCycleFlowEntity;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
@@ -31,15 +33,16 @@ import static com.b2b.sampleb2b.constants.AllConstants.DATABASE_VERSION;
  * Created by Abhishek Singh on 27/5/18.
  */
 @Database(entities = {FolderEntity.class, TaskDetailsEntity.class,
-                      SubFolderEntity.class}
+                      SubFolderEntity.class, FolderCycleFlowEntity.class}
                     , version = DATABASE_VERSION)
 @TypeConverters({ObjectConverter.class})
 public abstract class MyTaskDatabase extends RoomDatabase implements HelperInterface {
     private static MyTaskDatabase taskDatabase;
 
-    public abstract FolderDao      getFolderDao();
-    public abstract SubFolderDao   getSubFolderDao();
-    public abstract TaskDetailsDao getTaskDetailsDao();
+    public abstract FolderDao          getFolderDao();
+    public abstract SubFolderDao       getSubFolderDao();
+    public abstract TaskDetailsDao     getTaskDetailsDao();
+    public abstract FolderCycleFlowDao getFolderCycleFlowDao();
 
     private final MutableLiveData<Boolean> isDBCreated = new MutableLiveData<>();
 
@@ -78,8 +81,7 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
                 })
                 //.fallbackToDestructiveMigration() // This method clear the DB and create new DB from Scratch.
                                                  // So data will be wipedout. --Use this mtd in special scenarios.
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-                //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                 .build();
     }
 
@@ -125,6 +127,16 @@ public abstract class MyTaskDatabase extends RoomDatabase implements HelperInter
             database.execSQL("ALTER TABLE TaskDetails "
                     + " ADD COLUMN parentColumn TEXT");
             Log.e("MY DB", "Migrated to 2_3");
+        }
+    };
+
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `FolderCycleFlow` " +
+                    "(`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `FolderName` TEXT, " +
+                    "`FolderCycleFlow` TEXT )");
+            Log.e("MY DB", "Migrated to 3_4");
         }
     };
 
