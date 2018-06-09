@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     .getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                    FolderEntity folderTask = new FolderEntity();
+                    FolderEntity folderTask = new FolderEntity(); // This obj for Current Object Identification
                     folderTask.setInsertedFrom(FROM_HOME_FRAGMENT);
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     FolderCycleFlowEntity flowEntity = new FolderCycleFlowEntity();
                     flowEntity.setFolderName(folderName);
                     List<FolderEntity> entityList = new ArrayList<>();
-                    FolderEntity entity = new FolderEntity();
+                    FolderEntity entity = new FolderEntity(); // This obj for Home Fragment Object Identification
                     entity.setFolderName(FROM_HOME_FRAGMENT);
                     entityList.add(entity);
                     entityList.add(folderTask);

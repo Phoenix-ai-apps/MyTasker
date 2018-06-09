@@ -40,6 +40,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
     private AppCompatActivity activity;
     private IEditDeletePopup iEditDeletePopup;
     List<? extends Folder> mFolderList;
+    public static String GLOBAL_FOLDER = "";
 
     public CustomFolderTaskAdapter( IEditDeletePopup iEditDeletePopup) {
         this.iEditDeletePopup = iEditDeletePopup;
@@ -130,6 +131,8 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                                 transaction.replace(R.id.frameLayout_main, fragment).addToBackStack(null);
                                 transaction.commitAllowingStateLoss();
                             }else {
+                                //Activity Started from Home Fragment
+                                GLOBAL_FOLDER = task.getFolderName(); // This is primary key for fetching data from FolderCycleFlow Table
                                 ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
                             }
                         } else {

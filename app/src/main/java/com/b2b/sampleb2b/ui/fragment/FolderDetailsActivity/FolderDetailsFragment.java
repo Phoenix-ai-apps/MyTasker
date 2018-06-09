@@ -110,7 +110,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                 title = bundle.getString(TITLE);
             }
             if(bundle.containsKey(FOLDER_OBJ)){
-                folderEntity = bundle.getParcelable(FOLDER_OBJ);
+              //  folderEntity = bundle.getParcelable(FOLDER_OBJ);
             }
         }
         mColours = getResources().getIntArray(R.array.colours);

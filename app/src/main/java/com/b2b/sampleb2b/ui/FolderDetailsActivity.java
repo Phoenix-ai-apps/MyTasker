@@ -134,7 +134,6 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
         addFragment(fragment);
     }
 
-
     public void addFragment(Fragment fragment) {
          FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
          transaction.replace(R.id.frameLayout_main, fragment).addToBackStack(null);
