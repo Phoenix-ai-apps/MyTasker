@@ -7,22 +7,22 @@ import android.arch.lifecycle.MediatorLiveData;
 
 import com.b2b.sampleb2b.DataRepository;
 import com.b2b.sampleb2b.MyTaskApp;
-import com.b2b.sampleb2b.constants.AllConstants;
+import com.b2b.sampleb2b.db.entities.FolderCycleFlowEntity;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
-import com.b2b.sampleb2b.interfaces.Folder;
+import com.b2b.sampleb2b.models.FolderCycleFlow;
 
 import java.util.List;
 
 /**
  * Created by Abhishek Singh on 27/5/18.
  */
-public class FolderViewModel extends AndroidViewModel {
+public class FolderCycleFlowViewModel extends AndroidViewModel {
 
   private final MediatorLiveData<List<FolderEntity>> liveData;
-  private final MediatorLiveData<List<FolderEntity>> liveDataByName;
+  private final MediatorLiveData<FolderCycleFlowEntity> liveDataByName;
   private DataRepository dataRepository;
 
-  public FolderViewModel(Application application){
+  public FolderCycleFlowViewModel(Application application){
       super(application);
       liveData       = new MediatorLiveData<>();
       liveDataByName = new MediatorLiveData<>();
@@ -33,24 +33,14 @@ public class FolderViewModel extends AndroidViewModel {
       liveData.addSource(listLiveData, liveData::setValue);
   }
 
-  public LiveData<List<FolderEntity>> getAllFolders(){
-      return liveData;
-  }
+  public LiveData<List<FolderEntity>> getAllFolderCycleFlow(){ return liveData; }
 
-  public LiveData<List<FolderEntity>> getAllFoldersByInsertedFolder(String from){
+  public LiveData<FolderCycleFlowEntity> getFolderCycleFlowByName(String name){
       // set by default null, until we get data from the database.
       liveDataByName.setValue(null);
-      LiveData<List<FolderEntity>> listLiveDataByName = dataRepository.getAllHomeFolder(from);
-      liveDataByName.addSource(listLiveDataByName, liveDataByName::setValue);
+      LiveData<FolderCycleFlowEntity> listLiveData = dataRepository.getFolderEntFromFolderCycleByName(name);
+      liveDataByName.addSource(listLiveData, liveDataByName::setValue);
       return liveDataByName;
   }
-
-  public LiveData<List<FolderEntity>> getAllFoldersByFoldeName(String name){
-        // set by default null, until we get data from the database.
-        liveDataByName.setValue(null);
-        LiveData<List<FolderEntity>> listLiveDataByName = dataRepository.getAllFolderListByName(name);
-        liveDataByName.addSource(listLiveDataByName, liveDataByName::setValue);
-        return liveDataByName;
-    }
 
 }

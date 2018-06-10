@@ -24,6 +24,7 @@ import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.ActivityAddTaskBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
+import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
 import com.b2b.sampleb2b.models.AddTaskDetails;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
 import com.b2b.sampleb2b.receiver.TaskAlarmReceiver;
@@ -242,7 +243,12 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                     AppExecutors appExecutors = new AppExecutors();
                     appExecutors.getExeDiskIO().execute(()->{
                         MyTaskDatabase database = ((MyTaskApp)getApplicationContext()).getDatabase();
+                        TaskDetailsEntity taskDetailsEntity = database.getTaskDetailsDao().getTaskByName(addTaskDetails.getTaskName(),
+                                folderEntity.getFolderName());
                         int update = database.getFolderDao().updateFolderTask(folderEntity);
+                        if(taskDetailsEntity != null){
+                            int updateTask = database.getTaskDetailsDao().updateTaskDetails(taskDetailsEntity);
+                        }
                         finish();
                     });
                 }

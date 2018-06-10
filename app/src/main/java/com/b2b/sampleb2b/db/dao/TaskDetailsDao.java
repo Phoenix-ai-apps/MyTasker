@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.db.entities.TaskDetailsEntity;
@@ -27,5 +28,9 @@ public interface TaskDetailsDao {
 
     @Query("Select * from TaskDetails where taskName=:name and parentColumn=:parentFolder")
     TaskDetailsEntity getTaskByName(String name, String parentFolder);
+
+    @Update
+    int updateTaskDetails(TaskDetailsEntity folderEntitie);
+
 
 }

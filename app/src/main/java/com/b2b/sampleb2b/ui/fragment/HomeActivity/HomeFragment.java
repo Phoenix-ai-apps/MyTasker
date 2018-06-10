@@ -261,10 +261,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                                         onUiThread(true, TASK);
                                     }
                                 }
-
                             });
-
-
                         } else {
                             Toast.makeText(getActivity(), "Enter Task Name", Toast.LENGTH_SHORT).show();
                         }

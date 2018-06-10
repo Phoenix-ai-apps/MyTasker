@@ -20,16 +20,19 @@ import android.view.View;
 import com.b2b.sampleb2b.AppExecutors;
 import com.b2b.sampleb2b.MyTaskApp;
 import com.b2b.sampleb2b.R;
+import com.b2b.sampleb2b.adapters.CustomFolderTaskAdapter;
 import com.b2b.sampleb2b.adapters.FilterBottomDialogAdapter;
 import com.b2b.sampleb2b.constants.AllConstants;
 import com.b2b.sampleb2b.databinding.ActivityFolderDetailsBinding;
 import com.b2b.sampleb2b.db.MyTaskDatabase;
+import com.b2b.sampleb2b.db.entities.FolderCycleFlowEntity;
 import com.b2b.sampleb2b.db.entities.FolderEntity;
 import com.b2b.sampleb2b.db.entities.SubFolderEntity;
 import com.b2b.sampleb2b.utils.ApplicationUtils;
 import com.b2b.sampleb2b.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -118,12 +121,7 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
         listFilter.add("Filter 4");
         listFilter.add("Filter 5");
         listFilter.add("Filter 6");
-        listFilter.add("Filter 1");
-        listFilter.add("Filter 2");
-        listFilter.add("Filter 3");
-        listFilter.add("Filter 4");
-        listFilter.add("Filter 5");
-        listFilter.add("Filter 6");
+
         filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
         binding.incFilter.cmnRecView.recyclerview.setAdapter(filterBottomDialogAdapter);
         Bundle bundle = new Bundle();
@@ -152,7 +150,59 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
 
     private void checkCurrentFolder(){
         appExecutors.getExeDiskIO().execute(()->{
-            title = binding.includeToolbar.getFolder().getFolderName();
+            String globalFolder  = CustomFolderTaskAdapter.GLOBAL_FOLDER;
+            String currentFolder = binding.includeToolbar.txtToolbarTitle.getText().toString();
+            if(!TextUtils.isEmpty(globalFolder) && !TextUtils.isEmpty(currentFolder)){
+                FolderCycleFlowEntity flowEntity = database.getFolderCycleFlowDao().getFolderCycleFlowByFolder(globalFolder);
+                if(flowEntity != null && flowEntity.getFolderEntity() != null
+                        && flowEntity.getFolderEntity().size() > 0){
+                    List<FolderEntity> entitiesToShow = new ArrayList<>();
+                    int currFolderIndex = 0;
+                    for(FolderEntity entity : flowEntity.getFolderEntity()){
+                        String name = entity.getFolderName();
+                        /*if(!globalFolder.equalsIgnoreCase(currentFolder) &&
+                                !name.equalsIgnoreCase(currentFolder)){
+                            entitiesToShow.add(entity);
+                        }*/
+                        if(name.equalsIgnoreCase(currentFolder)){
+                            currFolderIndex = flowEntity.getFolderEntity().indexOf(entity);
+                        }
+                      }
+
+                     // if(entitiesToShow != null && entitiesToShow.size() > 0){
+                      if(currFolderIndex > 0){
+                         // Collections.reverse(entitiesToShow);
+                         // FolderEntity entity = entitiesToShow.get(currFolderIndex-1);
+                          FolderEntity entity = flowEntity.getFolderEntity().get(currFolderIndex-1);
+                          while (entity.getFolderName().equalsIgnoreCase(currentFolder)){
+                              if(currFolderIndex > 0){
+                                  currFolderIndex -=1;
+                                  entity = flowEntity.getFolderEntity().get(currFolderIndex-1);
+                              }
+                          }
+                          if(entity.getFolderName().equalsIgnoreCase(FROM_HOME_FRAGMENT)){
+                              finish();
+                          }else {
+                              Bundle bundle = new Bundle();
+                              binding.setFolder(entity);
+                              binding.includeToolbar.setFolder(entity);
+                              bundle.putString(TITLE          , entity.getFolderName());
+                              bundle.putParcelable(FOLDER_OBJ , entity);
+                              FolderDetailsFragment fragment = new FolderDetailsFragment();
+                              fragment.setArguments(bundle);
+                              addFragment(fragment);
+                          }
+                    }else {
+                        finish();
+                      }
+                }else {
+                    finish();
+                }
+            }else {
+                finish();
+            }
+
+/*            title = binding.includeToolbar.getFolder().getFolderName();
             SubFolderEntity entityFromHome = database.getSubFolderDao().getChildFolderByHome(title, FROM_HOME_FRAGMENT);
                 SubFolderEntity subFolderEntity = database.getSubFolderDao().getDataFromChildFolder(title);
                 if(subFolderEntity != null && !TextUtils.isEmpty(subFolderEntity.getParentFolder())){
@@ -172,7 +222,7 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
                     }
                 }else {
                     finish();
-                }
+                }*/
         });
     }
 

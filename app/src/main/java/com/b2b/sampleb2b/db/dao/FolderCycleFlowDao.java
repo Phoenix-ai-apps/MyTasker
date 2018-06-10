@@ -1,5 +1,6 @@
 package com.b2b.sampleb2b.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -21,7 +22,11 @@ public interface FolderCycleFlowDao {
     List<FolderCycleFlowEntity> getAllFolderCycleFlowList();
 
     @Query("Select * from FolderCycleFlow where FolderName=:name")
-    FolderCycleFlowEntity getFolderCycleFlowByName(String name);
+    LiveData<FolderCycleFlowEntity> getFolderCycleFlowByName(String name);
+
+    @Query("Select * from FolderCycleFlow where FolderName=:name")
+    FolderCycleFlowEntity getFolderCycleFlowByFolder(String name);
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFolderCycleFlow(FolderCycleFlowEntity folderCycleFlowEntity);

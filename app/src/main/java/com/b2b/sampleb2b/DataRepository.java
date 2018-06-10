@@ -75,9 +75,10 @@ public class DataRepository implements HelperInterface{
         return taskDatabase.getTaskDetailsDao().getTaskByName(name, parentFolder);
     }
 
-    public List<FolderEntity> getFolderEntFromFolderCycleByName(String name){
-        FolderCycleFlowEntity cycleFlowEntity = taskDatabase.getFolderCycleFlowDao().getFolderCycleFlowByName(name);
-        return cycleFlowEntity.getFolderEntity();
+    public LiveData<FolderCycleFlowEntity> getFolderEntFromFolderCycleByName(String name){
+        LiveData<FolderCycleFlowEntity> cycleFlowEntity =
+                taskDatabase.getFolderCycleFlowDao().getFolderCycleFlowByName(name);
+        return cycleFlowEntity;
     }
 
     @Override
