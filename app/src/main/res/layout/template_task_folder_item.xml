@@ -6,7 +6,7 @@
     <data>
         <variable
             name="folder"
-            type="com.b2b.sampleb2b.interfaces.Folder"/>
+            type="com.b2b.mytask.interfaces.Folder"/>
     </data>
 
     <com.daimajia.swipe.SwipeLayout

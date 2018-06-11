@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.b2b.sampleb2b">
+    package="com.b2b.mytask">
+
+    <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+       />
+<!--    android:resource="@mipmap/ic_launcher/ic_launcher"-->
+
+    <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+         notification message. See README(https://goo.gl/6BKBk7) for more. -->
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/colorAccent" />
 
     <application
         android:name=".MyTaskApp"
@@ -61,21 +74,34 @@
         <receiver
             android:name=".receiver.B2bBootReceiver"
             android:enabled="false">
-
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
-
         </receiver>
 
         <receiver
             android:name=".receiver.TaskAlarmReceiver"
             android:enabled="true">
-
-
         </receiver>
 
         <service android:name=".service.TaskAlarmService" />
+
+        <!--FCM-->
+        <!--Below Service is used to create Token ID-->
+        <service
+            android:name=".service.MyTaskFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!--Below service is used to receive msg's from FCM-->
+        <service
+            android:name=".service.MyTaskFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
     </application>
 

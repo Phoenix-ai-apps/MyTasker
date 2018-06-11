@@ -11,12 +11,24 @@
             android:id="@+id/inc_toolbar"
             layout="@layout/template_toolbar" />
 
-        <FrameLayout
+        <!--<FrameLayout
+            android:visibility="gone"
             android:id="@+id/frameLayout_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"/>-->
 
+        <TextView
+            android:id="@+id/txt_push_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_26sdp" />
+
+        <TextView
+            android:id="@+id/txt_reg_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
     </LinearLayout>
-
 
 </layout>

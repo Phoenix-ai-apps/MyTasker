@@ -9,7 +9,7 @@
             type="String"/>
         <variable
             name="taskDetails"
-            type="com.b2b.sampleb2b.models.AddTaskDetails"/>
+            type="com.b2b.mytask.models.AddTaskDetails"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

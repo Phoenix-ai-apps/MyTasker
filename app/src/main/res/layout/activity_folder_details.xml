@@ -6,7 +6,7 @@
     <data>
         <variable
             name="folder"
-            type="com.b2b.sampleb2b.db.entities.FolderEntity"/>
+            type="com.b2b.mytask.db.entities.FolderEntity"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
