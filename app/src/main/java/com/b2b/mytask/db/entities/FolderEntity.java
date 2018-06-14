@@ -21,15 +21,20 @@ import java.util.List;
 public class FolderEntity implements Folder, Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @ColumnInfo(name = "Folder")
     private String folderName;
+
     @ColumnInfo(name = "Color")
     private int color;
+
     @ColumnInfo(name = "InsertedFrom")
     private String insertedFrom;
+
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "TaskDetails")
     private AddTaskDetails taskDetails;
+
     @TypeConverters(ObjectConverter.class)
     @ColumnInfo(name = "FolderTaskList")
     private List<FolderTask>     folderTaskList;

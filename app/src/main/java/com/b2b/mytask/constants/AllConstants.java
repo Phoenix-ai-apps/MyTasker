@@ -10,7 +10,7 @@ public interface AllConstants {
     String TITLE                  = "title";
     String ADD_TASK               = "task";
     String ADD_FOLDER             = "folder";
-    String FROM_HOME_FRAGMENT     = "HOME";
+    String FROM_HOME_FRAGMENT     = "0";
     String SWIPE_EDIT             = "edit";
     String SWIPE_DELETE           = "delete";
     String FOLDER_OBJ             = "folderObj";

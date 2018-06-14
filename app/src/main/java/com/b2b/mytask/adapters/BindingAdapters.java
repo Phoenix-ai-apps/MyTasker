@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.interfaces.Folder;
 import com.b2b.mytask.models.AddTaskDetails;
 
@@ -76,6 +77,15 @@ public class BindingAdapters {
             ((TextView) view).setText(addTaskDetails.getTaskNote());
         }else {
             ((TextView) view).setText("");
+        }
+    }
+
+    @BindingAdapter("deleteFolderName")
+    public static void deleteFolderName(View view, FolderEntity folderEntity) {
+        if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
+            ((TextView) view).setText("Delete "+ folderEntity.getFolderName()+"?");
+        }else {
+            ((TextView) view).setText("Delete ");
         }
     }
 }

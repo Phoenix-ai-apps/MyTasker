@@ -71,6 +71,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
     private String                         title;
     private FolderEntity                   folderEntity;
     private String                         globalName ;
+    public  static int                     CURR_FOLDER_ID = 0;
 
     @Nullable
     @Override
@@ -79,6 +80,30 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         binding.setLifecycleOwner(this);
         initializeResources();
         return binding.getRoot();
+    }
+
+    private void initializeResources() {
+        if(context == null){
+            context = MyTaskApp.getInstance();
+        }
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            if(bundle.containsKey(TITLE)){
+                title = bundle.getString(TITLE);
+            }
+            if(bundle.containsKey(FOLDER_OBJ)){
+                folderEntity = bundle.getParcelable(FOLDER_OBJ);
+                CURR_FOLDER_ID = folderEntity.getId();
+            }
+        }
+        mColours = getResources().getIntArray(R.array.colours);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        iEditDeletePopup = (IEditDeletePopup) this;
+        binding.footer.imgAddTask.setOnClickListener(this);
+        binding.footer.txtNewFolder.setOnClickListener(this);
+        customFolderTaskAdapter = new CustomFolderTaskAdapter(iEditDeletePopup);
+        binding.rvWork.setAdapter(customFolderTaskAdapter);
     }
 
     @Override
@@ -91,8 +116,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
     }
 
     private void subscribeUi(FolderViewModel viewModel){
-        // getAllFoldersByInsertedFolder(title); || getAllFoldersByFoldeName
-        viewModel.getAllFoldersByInsertedFolder(title).observe(this, new Observer<List<FolderEntity>>() {
+        viewModel.getAllFoldersByInsertedFolder(String.valueOf(folderEntity.getId())).observe(this, new Observer<List<FolderEntity>>() {
             @Override
             public void onChanged(@Nullable List<FolderEntity> myProducts) {
                 if (myProducts != null) {
@@ -106,30 +130,6 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         });
     }
 
-    private void initializeResources() {
-        globalName = CustomFolderTaskAdapter.GLOBAL_FOLDER;
-        if(context == null){
-            context = MyTaskApp.getInstance();
-        }
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            if(bundle.containsKey(TITLE)){
-                title = bundle.getString(TITLE);
-            }
-            if(bundle.containsKey(FOLDER_OBJ)){
-                folderEntity = bundle.getParcelable(FOLDER_OBJ);
-            }
-        }
-        mColours = getResources().getIntArray(R.array.colours);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        iEditDeletePopup = (IEditDeletePopup) this;
-        binding.footer.imgAddTask.setOnClickListener(this);
-        binding.footer.txtNewFolder.setOnClickListener(this);
-        customFolderTaskAdapter = new CustomFolderTaskAdapter(iEditDeletePopup);
-        binding.rvWork.setAdapter(customFolderTaskAdapter);
-    }
-
     public void addFolder() {
         folderColor = mColours[0];
         final Dialog dialog = new Dialog(getActivity());
@@ -137,7 +137,7 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
         dialog.setContentView(R.layout.dialog_new_folder);
         dialog.show();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
+        int width  = metrics.widthPixels;
         int height = metrics.heightPixels;
         dialog.getWindow().setLayout((6 * width) / 7, LinearLayout.LayoutParams.WRAP_CONTENT);
         GridView gridView = (GridView) dialog.findViewById(R.id.gridView);
@@ -172,27 +172,18 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                             list.clear();
                         }*/
                         FolderEntity folderTask = new FolderEntity();
-                        folderTask.setInsertedFrom(title);
+                        folderTask.setInsertedFrom(String.valueOf(folderEntity.getId()));
                         folderTask.setFolderName(folderName);
                         folderTask.setColor(folderColor);
-
-                        SubFolderEntity subFolderEntity = new SubFolderEntity();
-                        subFolderEntity.setParentFolder(title);
-                        subFolderEntity.setChildFolder(folderName);
 
                         MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                         AppExecutors appExecutors = new AppExecutors();
                         appExecutors.getExeDiskIO().execute(()->{
-                            FolderCycleFlowEntity flowEntity = database.getFolderCycleFlowDao().getFolderCycleFlowByFolder(globalName);
-                            FolderEntity entityFromDB = database.getFolderDao().getFolderByFrom(folderName, title);
+                            FolderEntity entityFromDB =
+                                    database.getFolderDao().getFolderByFrom(folderName, String.valueOf(folderEntity.getId()));
                             if(entityFromDB == null){
-                                database.getSubFolderDao().insertSubFolder(subFolderEntity);
                                 database.getFolderDao().insertFolder(folderTask);
                                 // This code decides the flow of Folder From home Fragment
-                                if(flowEntity != null && flowEntity.getFolderEntity() != null && flowEntity.getFolderEntity().size() > 0){
-                                    flowEntity.getFolderEntity().add(folderTask);
-                                    int update = database.getFolderCycleFlowDao().updateFolderCycleFlow(flowEntity);
-                                }
                                 onUiThread(false, FOLDER);
                                 Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                             }else {
@@ -263,22 +254,23 @@ public class FolderDetailsFragment extends Fragment implements AllConstants, IEd
                             FolderEntity folderTask = new FolderEntity();
                             AddTaskDetails addTaskDetails = new AddTaskDetails();
                             addTaskDetails.setTaskName(task_name);
-                            addTaskDetails.setParentColumn(title);
-                            folderTask.setInsertedFrom(title);
+                            addTaskDetails.setParentColumn(String.valueOf(folderEntity.getId()));
+                            folderTask.setInsertedFrom(String.valueOf(folderEntity.getId()));
                             folderTask.setTaskDetails(addTaskDetails);
 
                             TaskDetailsEntity taskDetailsEntity = new TaskDetailsEntity();
                             taskDetailsEntity.setTaskName(task_name);
-                            taskDetailsEntity.setParentColumn(title);
+                            taskDetailsEntity.setParentColumn(String.valueOf(folderEntity.getId()));
 
                             MyTaskDatabase database = ((MyTaskApp) context.getApplicationContext()).getDatabase();
                             AppExecutors appExecutors = new AppExecutors();
                             appExecutors.getExeDiskIO().execute(()->{
                                 TaskDetailsEntity entityFromDB =
-                                        DataRepository.getDataRepository(database).getTaskByName(task_name, title);
+                                        DataRepository.getDataRepository(database).getTaskByName(task_name, String.valueOf(folderEntity.getId()));
                                 if(entityFromDB == null){
                                     database.getFolderDao().insertFolder(folderTask);
                                     database.getTaskDetailsDao().insertTaskDetails(taskDetailsEntity);
+                                    CURR_FOLDER_ID = folderTask.getId();
                                     onUiThread(false, TASK);
                                     Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                                 }else {

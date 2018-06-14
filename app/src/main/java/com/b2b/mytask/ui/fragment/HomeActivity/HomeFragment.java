@@ -168,21 +168,10 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
                     folderTask.setFolderName(folderName);
                     folderTask.setColor(folderColor);
 
-                    FolderCycleFlowEntity flowEntity = new FolderCycleFlowEntity();
-                    flowEntity.setFolderName(folderName);
-                    List<FolderEntity> entityList = new ArrayList<>();
-                    FolderEntity entity = new FolderEntity(); // This obj for Home Fragment Object Identification
-                    entity.setFolderName(FROM_HOME_FRAGMENT);
-                    entityList.add(entity);
-                    entityList.add(folderTask);
-                    flowEntity.setFolderEntity(entityList);
-
                     appExecutors.getExeDiskIO().execute(()->{
                         FolderEntity entityFromDB = DataRepository.getDataRepository(database).getFolderByName(folderName, FROM_HOME_FRAGMENT);
                         if(entityFromDB == null){
                             database.getFolderDao().insertFolder(folderTask);
-                            database.getFolderCycleFlowDao().insertFolderCycleFlow(flowEntity);
-                           // list.add(folderTask);
                             Log.e(TAG, "Data Inserted in Folder Table-- Folder Column");
                             onUiThread(false, FOLDER);
                         }else {

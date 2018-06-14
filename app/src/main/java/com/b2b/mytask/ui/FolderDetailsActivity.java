@@ -30,6 +30,7 @@ import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.db.entities.SubFolderEntity;
 import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
+import com.b2b.mytask.utils.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,79 +151,31 @@ public class FolderDetailsActivity extends AppCompatActivity implements AllConst
 
     private void checkCurrentFolder(){
         appExecutors.getExeDiskIO().execute(()->{
-            String globalFolder  = CustomFolderTaskAdapter.GLOBAL_FOLDER;
+            int  currFolderId    = FolderDetailsFragment.CURR_FOLDER_ID;
             String currentFolder = binding.includeToolbar.txtToolbarTitle.getText().toString();
-            if(!TextUtils.isEmpty(globalFolder) && !TextUtils.isEmpty(currentFolder)){
-                FolderCycleFlowEntity flowEntity = database.getFolderCycleFlowDao().getFolderCycleFlowByFolder(globalFolder);
-                if(flowEntity != null && flowEntity.getFolderEntity() != null
-                        && flowEntity.getFolderEntity().size() > 0){
-                    List<FolderEntity> entitiesToShow = new ArrayList<>();
-                    int currFolderIndex = 0;
-                    for(FolderEntity entity : flowEntity.getFolderEntity()){
-                        String name = entity.getFolderName();
-                        /*if(!globalFolder.equalsIgnoreCase(currentFolder) &&
-                                !name.equalsIgnoreCase(currentFolder)){
-                            entitiesToShow.add(entity);
-                        }*/
-                        if(name.equalsIgnoreCase(currentFolder)){
-                            currFolderIndex = flowEntity.getFolderEntity().indexOf(entity);
-                        }
-                      }
-
-                     // if(entitiesToShow != null && entitiesToShow.size() > 0){
-                      if(currFolderIndex > 0){
-                         // Collections.reverse(entitiesToShow);
-                         // FolderEntity entity = entitiesToShow.get(currFolderIndex-1);
-                          FolderEntity entity = flowEntity.getFolderEntity().get(currFolderIndex-1);
-                          while (entity.getFolderName().equalsIgnoreCase(currentFolder)){
-                              if(currFolderIndex > 0){
-                                  currFolderIndex -=1;
-                                  entity = flowEntity.getFolderEntity().get(currFolderIndex-1);
-                              }
-                          }
-                          if(entity.getFolderName().equalsIgnoreCase(FROM_HOME_FRAGMENT)){
-                              finish();
-                          }else {
-                              Bundle bundle = new Bundle();
-                              binding.setFolder(entity);
-                              binding.includeToolbar.setFolder(entity);
-                              bundle.putString(TITLE          , entity.getFolderName());
-                              bundle.putParcelable(FOLDER_OBJ , entity);
-                              FolderDetailsFragment fragment = new FolderDetailsFragment();
-                              fragment.setArguments(bundle);
-                              addFragment(fragment);
-                          }
-                    }else {
-                        finish();
-                      }
-                }else {
-                    finish();
-                }
+            if(!TextUtils.isEmpty(currentFolder)){
+               FolderEntity folderEntity = database.getFolderDao().getFolderByID(currFolderId);
+               if(folderEntity != null){
+                   if(!TextUtils.isEmpty(folderEntity.getInsertedFrom())
+                           && !folderEntity.getInsertedFrom().equalsIgnoreCase(FROM_HOME_FRAGMENT)){
+                       FolderEntity entity = database.getFolderDao().getFolderByID(ObjectUtils.getIntFromString(folderEntity.getInsertedFrom()));
+                       Bundle bundle = new Bundle();
+                       binding.setFolder(entity);
+                       binding.includeToolbar.setFolder(entity);
+                       bundle.putString(TITLE          , entity.getFolderName());
+                       bundle.putParcelable(FOLDER_OBJ , entity);
+                       FolderDetailsFragment fragment = new FolderDetailsFragment();
+                       fragment.setArguments(bundle);
+                       addFragment(fragment);
+                   }else {
+                       finish();
+                   }
+               }else {
+                   finish();
+               }
             }else {
                 finish();
             }
-
-/*            title = binding.includeToolbar.getFolder().getFolderName();
-            SubFolderEntity entityFromHome = database.getSubFolderDao().getChildFolderByHome(title, FROM_HOME_FRAGMENT);
-                SubFolderEntity subFolderEntity = database.getSubFolderDao().getDataFromChildFolder(title);
-                if(subFolderEntity != null && !TextUtils.isEmpty(subFolderEntity.getParentFolder())){
-                    FolderEntity folderEntity =
-                            database.getFolderDao().getByFolderName(subFolderEntity.getParentFolder());
-                    if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
-                        Bundle bundle = new Bundle();
-                        binding.setFolder(folderEntity);
-                        binding.includeToolbar.setFolder(folderEntity);
-                        bundle.putString(TITLE         , folderEntity.getFolderName());
-                        bundle.putParcelable(FOLDER_OBJ, folderEntity);
-                        FolderDetailsFragment fragment = new FolderDetailsFragment();
-                        fragment.setArguments(bundle);
-                        addFragment(fragment);
-                    }else {
-                        finish();
-                    }
-                }else {
-                    finish();
-                }*/
         });
     }
 

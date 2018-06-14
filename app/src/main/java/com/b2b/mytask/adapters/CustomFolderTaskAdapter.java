@@ -1,6 +1,7 @@
 package com.b2b.mytask.adapters;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -10,11 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.b2b.mytask.AppExecutors;
+import com.b2b.mytask.MyTaskApp;
 import com.b2b.mytask.databinding.TemplateTaskFolderItemBinding;
+import com.b2b.mytask.db.MyTaskDatabase;
 import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.interfaces.Folder;
 import com.b2b.mytask.ui.AddTaskActivity;
@@ -24,6 +29,7 @@ import com.b2b.mytask.constants.AllConstants;
 import com.b2b.mytask.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.interfaces.IEditDeletePopup;
+import com.b2b.mytask.utils.DialogUtils;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
@@ -40,7 +46,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
     private AppCompatActivity activity;
     private IEditDeletePopup iEditDeletePopup;
     List<? extends Folder> mFolderList;
-    public static String GLOBAL_FOLDER = "";
+    private Dialog dialog = null;
 
     public CustomFolderTaskAdapter( IEditDeletePopup iEditDeletePopup) {
         this.iEditDeletePopup = iEditDeletePopup;
@@ -132,7 +138,6 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                                 transaction.commitAllowingStateLoss();
                             }else {
                                 //Activity Started from Home Fragment
-                                GLOBAL_FOLDER = task.getFolderName(); // This is primary key for fetching data from FolderCycleFlow Table
                                 ApplicationUtils.startActivityIntent(activity, FolderDetailsActivity.class, bundle);
                             }
                         } else {
@@ -156,7 +161,25 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
         holder.binding.linearDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iEditDeletePopup.getClickEvent(SWIPE_DELETE);
+             //   iEditDeletePopup.getClickEvent(SWIPE_DELETE);
+                // delete from AllFolder where id = task.getId() or InsertedFrom = String.valueOf(task.getId)
+                 dialog = DialogUtils.showFolderDeleteDialog(task, activity, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AppExecutors appExecutors = new AppExecutors();
+                        appExecutors.getExeDiskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyTaskDatabase database = ((MyTaskApp) activity.getApplicationContext()).getDatabase();
+                                if(database != null){
+                                    int delete = database.getFolderDao().deleteFolderByIdAndInsertedBy(task.getId(), String.valueOf(task.getId()));
+                                    Log.e("Adapter",delete +" records deleted");
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
             }
         });
 

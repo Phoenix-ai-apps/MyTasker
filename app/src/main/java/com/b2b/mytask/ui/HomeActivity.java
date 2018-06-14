@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AllConstants {
 
     private ActivityHomeBinding homeBinding;
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver   mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,29 +43,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initialiseResource() {
-       // homeBinding.incToolbar.imgCalender.setOnClickListener(this);
-       // homeBinding.incToolbar.imgCalender.setVisibility(View.VISIBLE);
+        homeBinding.incToolbar.imgCalender.setOnClickListener(this);
+        homeBinding.incToolbar.imgCalender.setVisibility(View.VISIBLE);
         setToolbar();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
                 // checking for type intent filter
                 if (intent.getAction().equals(REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
                     FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_GLOBAL);
-
                     displayFirebaseRegId();
 
                 } else if (intent.getAction().equals(PUSH_NOTIFICATION)) {
                     // new push notification is received
-
                     String message = intent.getStringExtra("message");
-
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
                     homeBinding.txtPushMessage.setText(message);
                 }
             }
@@ -73,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         displayFirebaseRegId();
 
-       // addFragment(new HomeFragment());
+        addFragment(new HomeFragment());
     }
 
     // Fetches reg id from shared preferences
@@ -81,19 +76,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private void displayFirebaseRegId() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
-
         Log.e("HomeActivity.java", "Firebase reg id: " + regId);
-
-        if (!TextUtils.isEmpty(regId))
+       /* if (!TextUtils.isEmpty(regId))
             homeBinding.txtRegId.setText("Firebase Reg Id: " + regId);
         else
-            homeBinding.txtRegId.setText("Firebase Reg Id is not received yet!");
+            homeBinding.txtRegId.setText("Firebase Reg Id is not received yet!");*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(REGISTRATION_COMPLETE));
@@ -122,13 +114,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setToolbar() {
-/*        homeBinding.incToolbar.txt.setText("My Task");
+        homeBinding.incToolbar.txtToolbarTitle.setText("My Task");
         setSupportActionBar(  homeBinding.incToolbar.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }*/
+        }
     }
 
     @Override

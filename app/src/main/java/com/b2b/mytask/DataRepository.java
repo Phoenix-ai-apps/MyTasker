@@ -51,8 +51,8 @@ public class DataRepository implements HelperInterface{
         return obervableFolderEntity;
     }
 
-    public LiveData<List<FolderEntity>> getAllHomeFolder(String from){
-        return taskDatabase.getFolderDao().getFolderByName(from);
+    public LiveData<List<FolderEntity>> getAllFolderByParent(String from){
+        return taskDatabase.getFolderDao().getFolderByParentFolder(from);
     }
 
     public LiveData<List<FolderEntity>> getAllFolderListByName(String name){
