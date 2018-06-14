@@ -10,13 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import com.b2b.mytask.R;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Nihar.s on 12/5/18.
@@ -43,7 +38,7 @@ public class FilterBottomDialogAdapter extends RecyclerView.Adapter<FilterBottom
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolders holder, final int position) {
-        holder.txtFilter.setText(mlstFilter.get(position));
+       // holder.txtFilter.setText(mlstFilter.get(position));
     }
 
     @Override
@@ -63,6 +58,7 @@ public class FilterBottomDialogAdapter extends RecyclerView.Adapter<FilterBottom
 
     public class RecyclerViewHolders extends RecyclerView.ViewHolder {
 
+/*
         @Nullable
         @BindView(R.id.txt_filter)
         AppCompatTextView txtFilter;
@@ -79,12 +75,12 @@ public class FilterBottomDialogAdapter extends RecyclerView.Adapter<FilterBottom
         @Nullable
         @BindView(R.id.radio_group)
         RadioGroup radioGroup;
+*/
 
 
         RecyclerViewHolders(View view) {
             super(view);
-            ButterKnife.bind(this, view);
-
+          //  ButterKnife.bind(this, view);
         }
     }
 

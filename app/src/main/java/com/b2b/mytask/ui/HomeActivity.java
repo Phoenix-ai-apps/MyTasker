@@ -11,14 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.b2b.mytask.R;
 import com.b2b.mytask.constants.AllConstants;
 import com.b2b.mytask.databinding.ActivityHomeBinding;
@@ -26,9 +21,6 @@ import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.ui.fragment.HomeActivity.HomeFragment;
 import com.b2b.mytask.utils.NotificationUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AllConstants {
 

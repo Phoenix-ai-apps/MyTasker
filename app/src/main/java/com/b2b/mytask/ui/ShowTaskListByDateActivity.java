@@ -12,13 +12,10 @@ import android.view.View;
 import com.b2b.mytask.R;
 import com.b2b.mytask.ui.fragment.ShowTaskListByDate.TaskListByDateFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ShowTaskListByDateActivity extends AppCompatActivity implements View.OnClickListener {
 
     //@formatter:off
-    @BindView(R.id.img_back_arrow)          AppCompatImageView imgBack;
+//    @BindView(R.id.img_back_arrow)          AppCompatImageView imgBack;
 
     //@formatter:onl
 
@@ -26,7 +23,7 @@ public class ShowTaskListByDateActivity extends AppCompatActivity implements Vie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasklist_by_date);
-        ButterKnife.bind(this);
+      //  ButterKnife.bind(this);
         initialiseResource();
 
     }
@@ -36,7 +33,7 @@ public class ShowTaskListByDateActivity extends AppCompatActivity implements Vie
         setToolbar();
         addFragment(new TaskListByDateFragment());
 
-        imgBack.setOnClickListener(this);
+        //imgBack.setOnClickListener(this);
     }
 
     private void addFragment(TaskListByDateFragment fragment) {

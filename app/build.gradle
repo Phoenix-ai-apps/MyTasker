@@ -51,10 +51,10 @@ dependencies {
     // Architecture components
     implementation deps.lifecycle.runtime
     implementation deps.lifecycle.extensions
-    implementation deps.work.fcm
     annotationProcessor deps.lifecycle.compiler
     implementation deps.room.runtime
     annotationProcessor deps.room.compiler
+    implementation deps.work.fcm
 
     //Third Party Libraries
     implementation deps.thirdParty.joda
@@ -78,8 +78,5 @@ dependencies {
     androidTestImplementation deps.support.v4
     androidTestImplementation deps.support.app_compat
     androidTestImplementation deps.support.design
-
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 }

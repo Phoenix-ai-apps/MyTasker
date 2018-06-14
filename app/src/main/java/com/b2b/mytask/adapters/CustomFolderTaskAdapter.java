@@ -173,7 +173,11 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                                 MyTaskDatabase database = ((MyTaskApp) activity.getApplicationContext()).getDatabase();
                                 if(database != null){
                                     int delete = database.getFolderDao().deleteFolderByIdAndInsertedBy(task.getId(), String.valueOf(task.getId()));
-                                    Log.e("Adapter",delete +" records deleted");
+                                    Log.e("Adapter",delete +" Folder record deleted");
+                                    if(TextUtils.isEmpty(task.getFolderName())){
+                                        int deleteTask = database.getTaskDetailsDao().deleteTaskByParent(String.valueOf(task.getId()));
+                                        Log.e("Adapter",deleteTask +" Task record deleted");
+                                    }
                                 }
                                 dialog.dismiss();
                             }

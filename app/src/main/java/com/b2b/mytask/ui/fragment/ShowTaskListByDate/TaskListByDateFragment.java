@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Nihar.s on 15/5/18.
@@ -34,21 +32,15 @@ public class TaskListByDateFragment extends Fragment {
     List<TaskByDate> taskByDateList_final;
 
     // @formatter:off
-      @BindView(R.id.recyclerview)           RecyclerView recyclerview;
+//      @BindView(R.id.recyclerview)           RecyclerView recyclerview;
   // @formatter:on
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
-
-        ButterKnife.bind(this, rootView);
-
         initialiseResource();
-
         return rootView;
-
-
     }
 
     public void initialiseResource() {
@@ -64,12 +56,12 @@ public class TaskListByDateFragment extends Fragment {
             if (allTaskList.size() > 0) {
                 ShowTaskListAdapter adapter = new ShowTaskListAdapter(getActivity(), allTaskList);
 
-                recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+             /*   recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
                 recyclerview.setAdapter(adapter);
 
                 recyclerview.scrollToPosition(29);
-
+*/
             }
         }
 

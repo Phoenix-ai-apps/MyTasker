@@ -32,5 +32,8 @@ public interface TaskDetailsDao {
     @Update
     int updateTaskDetails(TaskDetailsEntity folderEntitie);
 
+    @Query("Delete from TaskDetails where parentColumn=:name")
+    int deleteTaskByParent(String name);
+
 
 }

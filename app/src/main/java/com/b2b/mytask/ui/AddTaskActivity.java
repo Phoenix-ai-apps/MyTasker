@@ -42,7 +42,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
     private static final String TAG =      "AddTaskActivity";
     private BottomSheetBehavior             mBottomSheetBehavior;
     private List<String>                    listFilter;
-    private int                             prorityType;
+    private int                             prorityType = -1;
     private ActivityAddTaskBinding          taskBinding;
     private FilterBottomDialogAdapter       filterBottomDialogAdapter ;
     private FolderEntity   folderEntity   = null;
@@ -230,7 +230,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                     Toast.makeText(this, "Select task repeat mode", Toast.LENGTH_SHORT).show();
                 }*/ else if (TextUtils.isEmpty(taskBinding.edtTaskNote.getText().toString().trim())) {
                     Toast.makeText(this, "Enter task note", Toast.LENGTH_SHORT).show();
-                } else if (prorityType == 0) {
+                } else if (prorityType < 0) {
                     Toast.makeText(this, "Select prority type", Toast.LENGTH_SHORT).show();
                 }else{
                     //start DB Transaction

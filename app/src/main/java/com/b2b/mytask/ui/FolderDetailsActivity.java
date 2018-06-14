@@ -31,13 +31,9 @@ import com.b2b.mytask.db.entities.SubFolderEntity;
 import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.ui.fragment.FolderDetailsActivity.FolderDetailsFragment;
 import com.b2b.mytask.utils.ObjectUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class FolderDetailsActivity extends AppCompatActivity implements AllConstants, View.OnClickListener {
 

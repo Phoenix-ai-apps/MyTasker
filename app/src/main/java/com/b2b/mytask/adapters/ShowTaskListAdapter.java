@@ -11,15 +11,7 @@ import android.widget.LinearLayout;
 
 import com.b2b.mytask.R;
 import com.b2b.mytask.models.TaskByDate;
-
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-/**
- * Created by Nihar.s on 12/5/18.
- */
 
 public class ShowTaskListAdapter extends RecyclerView.Adapter<ShowTaskListAdapter.RecyclerViewHolders> {
 
@@ -42,8 +34,8 @@ public class ShowTaskListAdapter extends RecyclerView.Adapter<ShowTaskListAdapte
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolders holder, final int position) {
-        holder.txtDayofWeek.setText(mlstFilter.get(position).month);
-        holder.txtDay.setText(mlstFilter.get(position).day);
+      //  holder.txtDayofWeek.setText(mlstFilter.get(position).month);
+      //  holder.txtDay.setText(mlstFilter.get(position).day);
     }
 
     @Override
@@ -63,7 +55,7 @@ public class ShowTaskListAdapter extends RecyclerView.Adapter<ShowTaskListAdapte
 
     public class RecyclerViewHolders extends RecyclerView.ViewHolder {
 
-        @Nullable
+     /*   @Nullable
         @BindView(R.id.txt_dayofweek)
         AppCompatTextView txtDayofWeek;
 
@@ -75,12 +67,11 @@ public class ShowTaskListAdapter extends RecyclerView.Adapter<ShowTaskListAdapte
         @Nullable
         @BindView(R.id.main_linear)
         LinearLayout mainLinear;
-
+*/
 
         RecyclerViewHolders(View view) {
             super(view);
-            ButterKnife.bind(this, view);
-
+          //  ButterKnife.bind(this, view);
         }
     }
 
