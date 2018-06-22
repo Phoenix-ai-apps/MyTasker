@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.DiffUtil;
@@ -74,6 +76,7 @@ public class CustomFolderTaskAdapter extends RecyclerSwipeAdapter<CustomFolderTa
                             folderList.get(newItemPosition).getId();
                 }
 
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     Folder newProduct = folderList.get(newItemPosition);

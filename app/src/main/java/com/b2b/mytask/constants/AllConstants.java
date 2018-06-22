@@ -24,6 +24,8 @@ public interface AllConstants {
     int NOTIFICATION_ID           = 100;
     int NOTIFICATION_ID_BIG_IMAGE = 101;
     String SHARED_PREF            = "ah_firebase";
+    String REPEAT_MODE            = "repeatMode";
+    String MOVE_TO                = "moveTo";
 
 
 }

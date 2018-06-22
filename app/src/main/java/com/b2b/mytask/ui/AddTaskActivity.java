@@ -5,9 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,14 +41,14 @@ import java.util.List;
 
 public class AddTaskActivity extends AppCompatActivity implements AllConstants, View.OnClickListener {
 
-    private static final String TAG =      "AddTaskActivity";
-    private BottomSheetBehavior             mBottomSheetBehavior;
-    private List<String>                    listFilter;
-    private int                             prorityType = -1;
-    private ActivityAddTaskBinding          taskBinding;
-    private FilterBottomDialogAdapter       filterBottomDialogAdapter ;
-    private FolderEntity   folderEntity   = null;
-    private AddTaskDetails addTaskDetails = null;
+    private static final String TAG       =  "AddTaskActivity";
+    private BottomSheetBehavior               mBottomSheetBehavior;
+    private List<String>                      listFilter;
+    private int                               prorityType = -1;
+    private ActivityAddTaskBinding            taskBinding;
+    private FilterBottomDialogAdapter         filterBottomDialogAdapter ;
+    private FolderEntity   folderEntity   =   null;
+    private AddTaskDetails addTaskDetails =   null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,23 +121,13 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
             }
         });
 
+        // dynamic for MOVE TO and REPEAT MODE
         listFilter = new ArrayList<>();
-        listFilter.add("Filter 1");
-        listFilter.add("Filter 2");
-        listFilter.add("Filter 3");
-        listFilter.add("Filter 4");
-        listFilter.add("Filter 5");
-        listFilter.add("Filter 6");
-        listFilter.add("Filter 1");
-        listFilter.add("Filter 2");
-        listFilter.add("Filter 3");
-        listFilter.add("Filter 4");
-        listFilter.add("Filter 5");
-        listFilter.add("Filter 6");
         filterBottomDialogAdapter = new FilterBottomDialogAdapter(this, listFilter);
         taskBinding.incFilter.cmnRecView.recyclerview.setAdapter(filterBottomDialogAdapter);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -198,8 +190,9 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square));
                 break;
             case R.id.layout_repeat:
-               taskBinding.incFilter.titleDialog.setText(R.string.select_repeat);
-               taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repeat, 0, 0, 0);
+              // taskBinding.incFilter.titleDialog.setText(R.string.select_repeat);
+              // taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repeat, 0, 0, 0);
+                setUpBottomSheetAdapter(REPEAT_MODE);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     filterBottomDialogAdapter.notifyDataSetChanged();
                     //If state is in collapse mode expand it
@@ -210,8 +203,9 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 }
                 break;
             case R.id.layout_moveto:
-                taskBinding.incFilter.titleDialog.setText(R.string.select_move_to);
-                taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_folder_stroke, 0, 0, 0);
+                setUpBottomSheetAdapter(MOVE_TO);
+              //  taskBinding.incFilter.titleDialog.setText(R.string.select_move_to);
+              //  taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_folder_stroke, 0, 0, 0);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     filterBottomDialogAdapter.notifyDataSetChanged();
                     //If state is in collapse mode expand it
@@ -259,6 +253,20 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         }
     }
 
+    private void setUpBottomSheetAdapter(String mode){
+        if(mode.equalsIgnoreCase(REPEAT_MODE)){
+            if(listFilter.size() == 0){
+                listFilter.add("Never");
+                listFilter.add("Every Day");
+                listFilter.add("Every Week");
+                listFilter.add("Every Month");
+                listFilter.add("Every Year");
+            }
+        }else if(mode.equalsIgnoreCase(MOVE_TO)){
+            listFilter.clear();
+        }
+    }
+
     private void setTaskAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(AddTaskActivity.this, TaskAlarmReceiver.class);
@@ -266,8 +274,8 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         alarmManager.cancel(pendingIntent);
         Calendar alarmStartTime = Calendar.getInstance();
         alarmStartTime.set(Calendar.HOUR_OF_DAY, 2);
-        alarmStartTime.set(Calendar.MINUTE, 13);
-        alarmStartTime.set(Calendar.SECOND, 00);
+        alarmStartTime.set(Calendar.MINUTE     , 13);
+        alarmStartTime.set(Calendar.SECOND     , 00);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarmStartTime.getTimeInMillis(), 0, pendingIntent);
     }
 

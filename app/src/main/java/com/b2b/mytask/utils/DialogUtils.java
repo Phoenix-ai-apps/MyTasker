@@ -1,40 +1,18 @@
 package com.b2b.mytask.utils;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
-import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.b2b.mytask.R;
-import com.b2b.mytask.databinding.DialogDeleteFolderBinding;
 import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.helper.ApplicationHelper;
 import com.b2b.mytask.helper.HelperInterface;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class DialogUtils implements HelperInterface {
 
@@ -48,7 +26,14 @@ public class DialogUtils implements HelperInterface {
         Button btnCancel  = (Button) alertDlgView.findViewById(R.id.btn_cancel);
         Button btnDelete  = (Button) alertDlgView.findViewById(R.id.btn_delete);
 
-        txtFName.setText("Delete "+entity.getFolderName()+"?");
+        if(!TextUtils.isEmpty(entity.getFolderName())){
+            txtFName.setText("Delete "+entity.getFolderName()+"?");
+        }else {
+            if(entity.getTaskDetails() != null
+                    && !TextUtils.isEmpty(entity.getTaskDetails().getTaskName())){
+                txtFName.setText("Delete "+entity.getTaskDetails().getTaskName()+"?");
+            }
+        }
 
         alert.setCancelable(true);
         btnCancel.setOnClickListener(v -> {
