@@ -72,6 +72,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layout_toolbar">
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/layout_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -371,6 +372,7 @@
                         android:background="@color/grey_400"
                         android:layout_gravity="center"
                         android:text="@string/select_a_filter"
+                        android:padding="@dimen/_7sdp"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/black"
                         android:visibility="visible"/>

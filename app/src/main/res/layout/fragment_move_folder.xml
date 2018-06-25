@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="isLoading"
+            type="Boolean"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:minHeight="@dimen/_35sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextColor="@android:color/white"
+            android:background="@color/grey_500"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/layout_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:background="@color/grey_500">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/img_back_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txt_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textSize="@dimen/_15sdp"
+                android:paddingLeft="@dimen/_10sdp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_back_arrow"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_solid_blue"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingLeft="@dimen/_20sdp"
+                android:paddingRight="@dimen/_20sdp"
+                android:layout_alignParentRight="true"
+                android:paddingTop="@dimen/_5sdp"
+                android:layout_centerVertical="true"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/linear_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:orientation="vertical"
+            android:layout_below="@+id/layout_header">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txt_inbox"
+                    style="@style/home_textview"
+                    android:gravity="start|center"
+                    android:text="@string/inbox"
+                    app:layout_constraintLeft_toRightOf="@+id/img_folder"
+                    app:layout_constraintRight_toLeftOf="@+id/txt_unseen_inbox" />
+
+                <ImageView
+                    android:id="@+id/img_arrow_inbox"
+                    style="@style/home_imageview"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"
+                app:visibleGone="@{!isLoading}"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</layout>

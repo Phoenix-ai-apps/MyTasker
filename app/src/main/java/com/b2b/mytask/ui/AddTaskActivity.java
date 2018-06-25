@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -28,8 +29,9 @@ import com.b2b.mytask.db.MyTaskDatabase;
 import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.db.entities.TaskDetailsEntity;
 import com.b2b.mytask.models.AddTaskDetails;
-import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.receiver.TaskAlarmReceiver;
+import com.b2b.mytask.ui.fragment.addTaskActivity.MoveFolderFragment;
+import com.b2b.mytask.utils.ApplicationUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,6 +87,8 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
         taskBinding.priorityThree.setOnClickListener(this);
         taskBinding.layoutRepeat.setOnClickListener(this);
         taskBinding.layoutMoveto.setOnClickListener(this);
+        taskBinding.layoutContainer.setOnClickListener(this);
+        taskBinding.edtTaskNote.setOnClickListener(this);
 
         //Find bottom Sheet ID
         mBottomSheetBehavior = BottomSheetBehavior.from(taskBinding.bottomSheet);
@@ -132,20 +136,25 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.txt_meeting_date:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 ApplicationUtils.showDatePicker(AddTaskActivity.this, taskBinding.txtMeetingDate);
                 break;
             case R.id.txt_meeting_time:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 ApplicationUtils.showTimePicker(AddTaskActivity.this, taskBinding.txtMeetingTime, taskBinding.txtRepeatalarmDate);
                 break;
             case R.id.img_clear_date:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 taskBinding.txtMeetingDate.setText(R.string.select_date);
                 taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
             case R.id.img_clear_time:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 taskBinding.txtMeetingTime.setText(R.string.select_time);
                 taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
             case R.id.priority_none:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 0;
                 taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.white));
                 taskBinding.priorityNone.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_left_rounded_corners_click));
@@ -157,6 +166,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_one:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 1;
                 taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.white));
                 taskBinding.priorityOne.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
@@ -168,6 +178,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_two:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 2;
                 taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.white));
                 taskBinding.priorityTwo.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_square_click));
@@ -179,6 +190,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_three:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 3;
                 taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.white));
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners_click));
@@ -216,6 +228,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 }
                 break;
             case R.id.tv_save:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 if (taskBinding.txtMeetingDate.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_date))) {
                     Toast.makeText(this, "Please Select Task Date", Toast.LENGTH_SHORT).show();
                 } else if (taskBinding.txtMeetingTime.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_time))) {
@@ -250,11 +263,22 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
             case R.id.tv_cancel:
                 finish();
                 break;
-        }
+            case R.id.layout_container:
+                //else if state is expanded collapse it
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+            case R.id.edt_task_note:
+               // else if state is expanded collapse it
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+    }
     }
 
     private void setUpBottomSheetAdapter(String mode){
         if(mode.equalsIgnoreCase(REPEAT_MODE)){
+            taskBinding.titleDialog.setText("Repeat Mode");
+            taskBinding.titleDialog.setVisibility(View.VISIBLE);
+            taskBinding.frameLayoutMain.setVisibility(View.GONE);
             if(listFilter.size() == 0){
                 listFilter.add("Never");
                 listFilter.add("Every Day");
@@ -264,6 +288,12 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
             }
         }else if(mode.equalsIgnoreCase(MOVE_TO)){
             listFilter.clear();
+            taskBinding.titleDialog.setVisibility(View.GONE);
+            taskBinding.frameLayoutMain.setVisibility(View.VISIBLE);
+            // add Move FolderFragment
+            MoveFolderFragment fragment = new MoveFolderFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(taskBinding.frameLayoutMain.getId() ,fragment,"MoveFolderFragment").commitAllowingStateLoss();
         }
     }
 

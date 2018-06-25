@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -69,6 +71,7 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
     private AppExecutors            appExecutors;
     private FragementHomeBinding    mBinding;
     private List<FolderEntity>      folderEntities;
+
     @Nullable
     @Override
     public View onCreateView(
@@ -85,11 +88,11 @@ public class HomeFragment extends Fragment implements IEditDeletePopup, AllConst
         appExecutors     = new AppExecutors();
         mColours         = getResources().getIntArray(R.array.colours);
         task_list        = new ArrayList<>();
-        iEditDeletePopup = (IEditDeletePopup) this;
         mBinding.footer.imgAddTask.setOnClickListener(this);
         mBinding.footer.txtNewFolder.setOnClickListener(this);
         customFolderTaskAdapter = new CustomFolderTaskAdapter(iEditDeletePopup);
         mBinding.recyclerview.setAdapter(customFolderTaskAdapter);
+      //  ((AppCompatActivity)getActivity()).setSupportActionBar(mBinding.toolbar);
     }
 
     @Override
