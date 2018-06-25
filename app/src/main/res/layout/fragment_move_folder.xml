@@ -61,7 +61,7 @@
                 android:layout_alignParentRight="true"
                 android:paddingTop="@dimen/_5sdp"
                 android:layout_centerVertical="true"
-                android:text="@string/save"
+                android:text="Move Here"
                 android:textColor="@color/white"
                 app:layout_constraintRight_toRightOf="parent" />
 

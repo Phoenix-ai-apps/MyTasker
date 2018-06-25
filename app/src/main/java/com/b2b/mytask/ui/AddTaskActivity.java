@@ -275,6 +275,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
     }
 
     private void setUpBottomSheetAdapter(String mode){
+        ApplicationUtils.hideKeyboard(this);
         if(mode.equalsIgnoreCase(REPEAT_MODE)){
             taskBinding.titleDialog.setText("Repeat Mode");
             taskBinding.titleDialog.setVisibility(View.VISIBLE);
