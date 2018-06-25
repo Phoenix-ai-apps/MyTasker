@@ -136,24 +136,29 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.txt_meeting_date:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 ApplicationUtils.showDatePicker(AddTaskActivity.this, taskBinding.txtMeetingDate);
                 break;
             case R.id.txt_meeting_time:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 ApplicationUtils.showTimePicker(AddTaskActivity.this, taskBinding.txtMeetingTime, taskBinding.txtRepeatalarmDate);
                 break;
             case R.id.img_clear_date:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 taskBinding.txtMeetingDate.setText(R.string.select_date);
                 taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
             case R.id.img_clear_time:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 taskBinding.txtMeetingTime.setText(R.string.select_time);
                 taskBinding.txtRepeatalarmDate.setVisibility(View.GONE);
                 break;
             case R.id.priority_none:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 0;
                 taskBinding.priorityNone.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -166,6 +171,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_one:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 1;
                 taskBinding.priorityOne.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -178,6 +184,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_two:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 2;
                 taskBinding.priorityTwo.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -190,6 +197,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 taskBinding.priorityThree.setBackground(ContextCompat.getDrawable(this, R.drawable.segment_right_rounded_corners));
                 break;
             case R.id.priority_three:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 prorityType = 3;
                 taskBinding.priorityThree.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -205,6 +213,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
               // taskBinding.incFilter.titleDialog.setText(R.string.select_repeat);
               // taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repeat, 0, 0, 0);
                 setUpBottomSheetAdapter(REPEAT_MODE);
+                ApplicationUtils.hideKeyboard(this);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     filterBottomDialogAdapter.notifyDataSetChanged();
                     //If state is in collapse mode expand it
@@ -215,6 +224,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 }
                 break;
             case R.id.layout_moveto:
+                ApplicationUtils.hideKeyboard(this);
                 setUpBottomSheetAdapter(MOVE_TO);
               //  taskBinding.incFilter.titleDialog.setText(R.string.select_move_to);
               //  taskBinding.incFilter.titleDialog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_folder_stroke, 0, 0, 0);
@@ -228,6 +238,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 }
                 break;
             case R.id.tv_save:
+                ApplicationUtils.hideKeyboard(this);
                 mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 if (taskBinding.txtMeetingDate.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.select_date))) {
                     Toast.makeText(this, "Please Select Task Date", Toast.LENGTH_SHORT).show();
@@ -261,6 +272,7 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
                 }
                 break;
             case R.id.tv_cancel:
+                ApplicationUtils.hideKeyboard(this);
                 finish();
                 break;
             case R.id.layout_container:
