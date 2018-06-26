@@ -26,6 +26,7 @@ public interface AllConstants {
     String SHARED_PREF            = "ah_firebase";
     String REPEAT_MODE            = "repeatMode";
     String MOVE_TO                = "moveTo";
+    String MOVE_FROM              = "moveFrom";
 
 
 }

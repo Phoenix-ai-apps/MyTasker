@@ -40,6 +40,7 @@ public class MoveFolderFragment extends Fragment implements HelperInterface{
     private MyTaskDatabase             database    ;
     private AppExecutors               appExecutors;
     private FragmentMoveFolderBinding  mBinding;
+    private String                     from = "";
 
     @Nullable
     @Override
@@ -59,6 +60,11 @@ public class MoveFolderFragment extends Fragment implements HelperInterface{
         mColours         = getResources().getIntArray(R.array.colours);
         mBinding.recyclerview.setAdapter(moveFolderAdapter);
         folderEntities   = new ArrayList<>();
+
+        Bundle bundle = getArguments();
+        if(bundle != null && bundle.containsKey(MOVE_FROM)){
+            from = bundle.getString(MOVE_FROM);
+        }
     }
 
     @Override

@@ -11,8 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="match_parent"
+        android:background="@color/grey_200">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -100,6 +100,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_recView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear_parent">
@@ -112,6 +113,19 @@
                 app:visibleGone="@{!isLoading}"/>
 
         </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/txt_no_folder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No more folders"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/layout_recView"
+            android:textSize="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/grey_900"
+            app:visibleGone="@{isLoading}"/>
 
 
     </RelativeLayout>

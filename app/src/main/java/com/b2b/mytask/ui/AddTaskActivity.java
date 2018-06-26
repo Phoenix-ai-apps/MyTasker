@@ -305,6 +305,9 @@ public class AddTaskActivity extends AppCompatActivity implements AllConstants, 
             taskBinding.frameLayoutMain.setVisibility(View.VISIBLE);
             // add Move FolderFragment
             MoveFolderFragment fragment = new MoveFolderFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(MOVE_FROM, "HOME");
+            fragment.setArguments(bundle);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(taskBinding.frameLayoutMain.getId() ,fragment,"MoveFolderFragment").commitAllowingStateLoss();
         }
