@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="folder"
-            type="com.b2b.mytask.db.entities.FolderEntity"/>
+            type="com.b2b.mytask.db.entities.FolderEntity" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -17,17 +17,21 @@
             android:id="@+id/include_toolbar"
             layout="@layout/template_work_toolbar" />
 
+
         <FrameLayout
             android:id="@+id/frameLayout_main"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_400sdp"
-            app:layout_constraintTop_toBottomOf="@+id/include_toolbar"/>
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include_toolbar" />
 
-       <!-- <include
-            layout="@layout/template_frame_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/include_toolbar" />-->
+        <!-- <include
+             layout="@layout/template_frame_layout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             app:layout_constraintTop_toBottomOf="@+id/include_toolbar" />-->
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -46,21 +50,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/grey_400">
+                    android:background="@color/toolbar_clr"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <com.b2b.mytask.customviews.CustomTextView
                         android:id="@+id/title_dialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:drawableLeft="@drawable/ic_swap"
                         android:drawablePadding="@dimen/_5sdp"
                         android:gravity="center"
-                        android:layout_gravity="center"
                         android:padding="@dimen/_10sdp"
                         android:text="@string/select_a_filter"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"
+                        app:fontName="@string/bold_font" />
+
                     <include
                         android:id="@+id/inc_filter"
                         layout="@layout/dialog_filter" />

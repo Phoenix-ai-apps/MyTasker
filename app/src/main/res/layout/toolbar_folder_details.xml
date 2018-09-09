@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent">
 
-            <android.support.v7.widget.AppCompatTextView
+            <com.b2b.mytask.customviews.CustomTextView
                 android:id="@+id/txt_toolbar_title"
                 style="@style/Both_Wrap_style"
                 android:layout_alignParentLeft="true"

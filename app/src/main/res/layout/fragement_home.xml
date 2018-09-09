@@ -1,327 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false">
 
     <data>
+
         <variable
             name="isLoading"
-            type="Boolean"/>
+            type="Boolean" />
     </data>
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        tools:context=".view.DashboardActivity">
 
-
-        <LinearLayout
-            android:id="@+id/linear_parent"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:orientation="vertical">
+            android:theme="@style/NoActionBarTheme.AppBarOverlay"
+            app:elevation="0dp">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <include
+                android:id="@+id/inc_toolbar"
+                layout="@layout/template_toolbar" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_folder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:src="@drawable/ic_inbox"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_inbox"
-                    style="@style/home_textview"
-                    android:gravity="start|center"
-                    android:text="@string/inbox"
-                    app:layout_constraintLeft_toRightOf="@+id/img_folder"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_unseen_inbox" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_unseen_inbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle_shaped"
-                    android:gravity="center"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_seen_inbox"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_seen_inbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/_3sdp"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/img_arrow_inbox"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/img_arrow_inbox"
-                    style="@style/home_imageview"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_today"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/_7sdp"
-                    android:src="@drawable/ic_today"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_today"
-                    style="@style/home_textview"
-                    android:gravity="start|center"
-                    android:text="@string/today"
-                    app:layout_constraintLeft_toRightOf="@+id/img_today"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_unseen_today" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_unseen_today"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle_shaped"
-                    android:gravity="center"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_seen_today"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_seen_today"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/_3sdp"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/img_arrow_today"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/img_arrow_today"
-                    style="@style/home_imageview"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/_7sdp"
-                    android:src="@drawable/ic_week"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_this_week"
-                    style="@style/home_textview"
-                    android:gravity="start|center"
-                    android:text="@string/this_week"
-                    app:layout_constraintLeft_toRightOf="@+id/img_week"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_unseen_week" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_unseen_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle_shaped"
-                    android:gravity="center"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_seen_week"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_seen_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/_3sdp"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/img_arrow_week"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/img_arrow_week"
-                    style="@style/home_imageview"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_tasks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:src="@drawable/ic_all_tasks"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/home_textview"
-                    android:gravity="start|center"
-                    android:text="@string/all_tasks"
-                    app:layout_constraintLeft_toRightOf="@+id/img_tasks"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_unseen_tasks" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_unseen_tasks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle_shaped"
-                    android:gravity="center"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/txt_seen_tasks"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/txt_seen_tasks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/_3sdp"
-                    android:text="12"
-                    android:textSize="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/img_arrow_tasks"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/img_arrow_tasks"
-                    style="@style/home_imageview"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_completed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:src="@drawable/ic_completed"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/home_textview"
-                    android:gravity="start|center"
-                    android:text="@string/completed"
-                    app:layout_constraintLeft_toRightOf="@+id/img_completed"
-                    app:layout_constraintRight_toLeftOf="@+id/img_clear_time" />
-
-
-                <ImageView
-                    android:id="@+id/img_clear_time"
-                    style="@style/home_imageview"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linear_parent"
-            android:layout_above="@+id/footer">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="LinearLayoutManager"
-                app:visibleGone="@{!isLoading}"/>
-
-        </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
 
         <include
-            android:id="@+id/footer"
-            layout="@layout/layout_footer"
+            android:id="@+id/include_main_content"
+            layout="@layout/content_dashboard" />
+
+        <View
+            android:id="@+id/view_bg"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/rl_fab_folder"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-    </RelativeLayout>
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/ctv_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/gradient_rounded_corner_purple"
+                android:padding="@dimen/_5sdp"
+                android:text="New Folder"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:fontName="@string/regular_font" />
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/deep_purple_500"
+                android:clickable="false"
+                android:shadowColor="@android:color/white"
+                app:borderWidth="0dp"
+                app:srcCompat="@drawable/ic_folder"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_fab_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/ctv_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/gradient_rounded_corner_purple"
+                android:padding="@dimen/_5sdp"
+                android:text="New Task"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:fontName="@string/regular_font" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/deep_purple_500"
+                android:clickable="false"
+                android:shadowColor="@android:color/white"
+                app:borderWidth="0dp"
+                app:srcCompat="@drawable/ic_task_white"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="@color/purple_500"
+            android:clickable="true"
+            android:focusable="true"
+            android:shadowColor="@android:color/white"
+            app:borderWidth="0dp"
+            app:srcCompat="@drawable/ic_add"
+            tools:ignore="VectorDrawableCompat" />
+
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

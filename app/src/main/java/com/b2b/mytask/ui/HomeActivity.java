@@ -1,5 +1,6 @@
 package com.b2b.mytask.ui;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,18 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.b2b.mytask.R;
 import com.b2b.mytask.constants.AllConstants;
 import com.b2b.mytask.databinding.ActivityHomeBinding;
-import com.b2b.mytask.utils.ApplicationUtils;
 import com.b2b.mytask.ui.fragment.HomeActivity.HomeFragment;
+import com.b2b.mytask.utils.ApplicationUtils;
+import com.b2b.mytask.utils.DialogUtils;
 import com.b2b.mytask.utils.NotificationUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, AllConstants {
 
     private ActivityHomeBinding homeBinding;
-    private BroadcastReceiver   mRegistrationBroadcastReceiver;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private Dialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +39,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initialiseResource() {
-        homeBinding.incToolbar.imgCalender.setOnClickListener(this);
-        homeBinding.incToolbar.imgCalender.setVisibility(View.VISIBLE);
-        setToolbar();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -61,6 +62,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         displayFirebaseRegId();
 
         addFragment(new HomeFragment());
+
+        //setTaskAlarm();
+
+        ApplicationUtils.cancelTaskAlarm(HomeActivity.this, MAIN_NOTIFICATION_CODE);
+        ApplicationUtils.fireAlarmDaily12AM(HomeActivity.this, MAIN_NOTIFICATION_CODE);
     }
 
     // Fetches reg id from shared preferences
@@ -89,6 +95,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         // clear the notification area when the app is opened
         NotificationUtils.clearNotifications(getApplicationContext());
+
     }
 
     @Override
@@ -105,15 +112,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void setToolbar() {
-        homeBinding.incToolbar.txtToolbarTitle.setText("My Task");
-        setSupportActionBar(  homeBinding.incToolbar.toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -121,5 +119,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.img_calender:
                 ApplicationUtils.startActivityIntent(this, ShowTaskListByDateActivity.class, Bundle.EMPTY);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        dialog = DialogUtils.showFolderDeleteDialog(null, null, HomeActivity.this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 }

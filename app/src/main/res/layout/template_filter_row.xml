@@ -1,41 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/filter_main_constraint"
+    <LinearLayout
+        android:id="@+id/ll_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_100"
-        android:padding="@dimen/_5sdp">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/white">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/txt_filter"
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:id="@+id/filter_main_constraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/radio_group"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="@dimen/_5sdp">
 
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/txt_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/iv_tick"
+                android:gravity="left|center"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/black"
+                app:fontName="@string/regular_font" />
 
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent">
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="parent">
 
-            <RadioButton
-                android:id="@+id/filter_radio"
+                <RadioButton
+                    android:id="@+id/filter_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+            <ImageView
+                android:id="@+id/iv_tick"
                 android:layout_width="wrap_content"
-                android:checked="false"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:src="@drawable/ic_selected"
+                android:visibility="gone"
+                android:foregroundGravity="center_vertical"/>
 
-        </RadioGroup>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -43,8 +62,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@color/grey_200"
             app:layout_constraintTop_toBottomOf="@+id/txt_filter" />
-
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
 </layout>
 

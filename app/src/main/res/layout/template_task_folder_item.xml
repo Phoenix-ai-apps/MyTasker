@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="folder"
-            type="com.b2b.mytask.interfaces.Folder"/>
+            type="com.b2b.mytask.interfaces.Folder" />
     </data>
 
     <LinearLayout
@@ -18,70 +18,122 @@
             android:id="@+id/swipe_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey_200"
-            android:paddingLeft="@dimen/_5sdp"
-            android:paddingRight="@dimen/_5sdp"
+            android:background="@color/white"
             app:clickToClose="true">
 
+            <!--Right Swipe-->
             <LinearLayout
-                android:id="@+id/linear_swipe"
+                android:id="@+id/linear_right_swipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp"
                 android:weightSum="2">
 
                 <LinearLayout
                     android:id="@+id/linear_delete"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/red"
+                    android:background="@drawable/gradient_sharp_corner_red"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_5sdp">
+                    android:padding="@dimen/_5sdp"
+                    android:weightSum="1">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
                         android:src="@drawable/ic_delete" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
                         android:text="@string/delete"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linear_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/gradient_sharp_corner_blue"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/_15sdp"
-                    android:paddingRight="@dimen/_15sdp">
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:weightSum="1">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
                         android:src="@drawable/ic_edit" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
                         android:text="@string/edit_lower"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
 
                 </LinearLayout>
 
 
             </LinearLayout>
 
+            <!--LEFT SWIPE -->
+            <LinearLayout
+                android:id="@+id/linear_left_swipe"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:id="@+id/linear_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/gradient_sharp_corner_green"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/img_finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
+                        android:src="@drawable/ic_done" />
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:id="@+id/txt_task_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
+                        android:text="@string/finish"
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!--Main layout-->
             <LinearLayout
                 android:id="@+id/linear_main"
                 android:layout_width="match_parent"
@@ -91,7 +143,7 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <ImageView
@@ -100,48 +152,77 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingLeft="@dimen/_5sdp"
-                        android:src="@drawable/orange_folder"
+                        android:src="@drawable/ic_white_solid_folder"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <com.b2b.mytask.customviews.CustomTextView
                         android:id="@+id/txt_task"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:padding="@dimen/_5sdp"
-                        app:folderNameText="@{folder}"
-                        android:textColor="@android:color/black"
-                        app:layout_constraintLeft_toRightOf="@+id/img_folder"
-                        app:layout_constraintRight_toLeftOf="@+id/txt_unseen_inbox" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/txt_unseen_inbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/circle_shaped"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@android:color/black"
+                        app:folderNameText="@{folder}"
+                        app:fontName="@string/regular_font"
+                        app:layout_constraintLeft_toRightOf="@+id/img_folder" />
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:id="@+id/txt_unseen_inbox"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:background="@drawable/circle_shaped_green"
                         android:gravity="center"
                         android:text="12"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/_8sdp"
+                        android:visibility="gone"
+                        app:fontName="@string/regular_font"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/txt_seen_inbox"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <com.b2b.mytask.customviews.CustomTextView
                         android:id="@+id/txt_seen_inbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/_3sdp"
                         android:textSize="@dimen/_8sdp"
+                        android:visibility="gone"
                         app:folderTaskSize="@{folder}"
+                        app:fontName="@string/regular_font"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toLeftOf="@+id/img_arrow_inbox"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
                     <!-- android:text="@{folder.folderTaskList.size()}"-->
+
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:id="@+id/txt_priority_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:textColor="@color/grey_600"
+                        android:textSize="@dimen/_8sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/linear_priority"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linear_priority"
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:background="@drawable/circle_priority"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/img_arrow_inbox"
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                     <ImageView
                         android:id="@+id/img_arrow_inbox"
@@ -158,8 +239,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/grey_300" />
+            android:layout_height="@dimen/_1sdp" />
 
     </LinearLayout>
 

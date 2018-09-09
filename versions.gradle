@@ -55,10 +55,13 @@ versions.joda = "2.9.9.3"
 versions.gson = "2.8.0"
 versions.fcm  = "17.0.0"
 versions.google_services = "4.0.0"
+versions.MPAndroidChart = "v3.0.3"
+versions.eventbus = "3.0.0"
+
 def deps = [:]
 
 def build_versions = [:]
-build_versions.min_sdk      = 14
+build_versions.min_sdk      = 16
 build_versions.target_sdk   = 26
 build_versions.build_tools  = "27.0.3"
 build_versions.version_code = 1
@@ -166,10 +169,12 @@ navigation.testing_ktx = "android.arch.navigation:navigation-testing-ktx:$versio
 deps.navigation = navigation
 
 def thirdParty =[:]
-thirdParty.swipeLayout = "com.daimajia.swipelayout:library:$versions.swipeLayout"
-thirdParty.sdp         = "com.intuit.sdp:sdp-android:$versions.sdp"
-thirdParty.joda        = "net.danlew:android.joda:$versions.joda"
-thirdParty.gson        = "com.google.code.gson:gson:$versions.gson"
+thirdParty.swipeLayout              = "com.daimajia.swipelayout:library:$versions.swipeLayout"
+thirdParty.sdp                      = "com.intuit.sdp:sdp-android:$versions.sdp"
+thirdParty.joda                     = "net.danlew:android.joda:$versions.joda"
+thirdParty.gson                     = "com.google.code.gson:gson:$versions.gson"
+thirdParty.eventbus                 = "org.greenrobot:eventbus:$versions.eventbus"
+thirdParty.MPAndroidChart           = "com.github.PhilJay:MPAndroidChart:$versions.MPAndroidChart"
 deps.thirdParty = thirdParty
 
 ext.deps = deps
@@ -178,5 +183,6 @@ def addRepos(RepositoryHandler handler) {
     handler.google()
     handler.jcenter()
     handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    handler.maven { url "https://jitpack.io" }
 }
 ext.addRepos = this.&addRepos

@@ -2,15 +2,11 @@ package com.b2b.mytask.adapters;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+
 import com.b2b.mytask.R;
 import com.b2b.mytask.databinding.TemplateFilterRowBinding;
 
@@ -18,6 +14,7 @@ import java.util.List;
 
 public class FilterBottomDialogAdapter extends RecyclerView.Adapter<FilterBottomDialogAdapter.RecyclerViewHolders> {
 
+    int selected_position = 1;
     private Context context;
     private List<String> mlstFilter;
 
@@ -37,9 +34,25 @@ public class FilterBottomDialogAdapter extends RecyclerView.Adapter<FilterBottom
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolders holder, final int position) {
-        if(mlstFilter != null && mlstFilter.size() > 0){
+        if (mlstFilter != null && mlstFilter.size() > 0) {
             holder.binding.txtFilter.setText(mlstFilter.get(position));
         }
+
+        if (position != selected_position) {
+            holder.binding.ivTick.setVisibility(View.GONE);
+            holder.binding.llRow.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
+
+        holder.binding.filterMainConstraint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selected_position = position;
+                notifyDataSetChanged();
+                holder.binding.ivTick.setVisibility(View.VISIBLE);
+                holder.binding.llRow.setBackgroundColor(context.getResources().getColor(R.color.grey_100));
+            }
+        });
+
     }
 
     @Override

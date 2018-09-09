@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/_10sdp">
+
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/img_title_folder"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_create_folder" />
+
+        <com.b2b.mytask.customviews.CustomTextView
+            android:id="@+id/title_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_title_folder"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/create_folder"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/black"
+            app:fontName="@string/bold_font" />
+
+
+        <com.b2b.mytask.customviews.CustomTextView
+            android:id="@+id/txt_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_10sdp"
+            android:background="@drawable/outline_rounded_purple"
+            android:paddingRight="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="@string/save"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/purple_500"
+            app:fontName="@string/bold_font" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:background="@color/clr_dividerline"
+        app:layout_constraintTop_toBottomOf="@+id/layout_title" />
+
+
+    <LinearLayout
+        android:id="@+id/linear_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/view_title">
+
+        <com.b2b.mytask.customviews.CustomTextInputLayout
+            android:id="@+id/input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textColorHint="@android:color/black"
+            app:inputFont="@string/bold_font">
+
+            <com.b2b.mytask.customviews.CustomEditText
+                android:id="@+id/edt_folder_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_folder_name"
+                android:inputType="textCapSentences"
+                android:singleLine="true"
+                app:editFont="@string/regular_font" />
+
+        </com.b2b.mytask.customviews.CustomTextInputLayout>
+
+
+        <com.b2b.mytask.customviews.CustomTextView
+            android:id="@+id/select_folder_colour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/select_folder_colour"
+            android:textColor="@android:color/black"
+            app:fontName="@string/regular_font" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:background="@color/clr_dividerline"
+            android:visibility="gone" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:numColumns="5" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <!--<android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txt_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/save"
+        android:textColor="@color/black"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_main" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txt_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/black"
+        app:layout_constraintRight_toLeftOf="@+id/txt_save"
+        app:layout_constraintTop_toBottomOf="@+id/linear_main" />-->
+
+    <!--  <com.b2b.mytask.customviews.CustomTextView
+          android:id="@+id/txt_cancel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="@dimen/_8sdp"
+          android:paddingBottom="@dimen/_5sdp"
+          android:paddingLeft="@dimen/_15sdp"
+          android:paddingRight="@dimen/_5sdp"
+          android:paddingTop="@dimen/_5sdp"
+          android:text="@string/cancel"
+          android:textColor="@color/theme"
+          app:fontName="@string/bold_font"
+          app:layout_constraintTop_toBottomOf="@+id/linear_main" />
+  -->
+
+    <!--<com.b2b.mytask.customviews.CustomTextView
+        android:id="@+id/txt_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:text="@string/save"
+        android:textColor="@color/theme"
+        app:fontName="@string/bold_font"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_main" />
+-->
+</android.support.constraint.ConstraintLayout>
+

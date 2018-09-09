@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.b2b.mytask.customviews.CustomTextView
             android:id="@+id/title_dialog"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -19,6 +19,7 @@
             android:gravity="center"
             android:padding="@dimen/_5sdp"
             android:text="@string/select_a_filter"
+            app:fontName="@string/bold_font"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -27,7 +28,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_dialog">
@@ -35,7 +35,6 @@
             <include
                 android:id="@+id/cmn_rec_view"
                 layout="@layout/common_recyclerview" />
-
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>

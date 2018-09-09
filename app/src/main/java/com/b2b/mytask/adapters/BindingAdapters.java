@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.b2b.mytask.R;
 import com.b2b.mytask.db.entities.FolderEntity;
 import com.b2b.mytask.interfaces.Folder;
 import com.b2b.mytask.models.AddTaskDetails;
@@ -35,13 +36,13 @@ public class BindingAdapters {
     @BindingAdapter("folderNameText")
     public static void setFolderNameText(View view, Folder folder) {
         String name = "";
-        if(folder != null && !TextUtils.isEmpty(folder.getFolderName())){
+        if (folder != null && !TextUtils.isEmpty(folder.getFolderName())) {
             name = folder.getFolderName();
-        }else if(folder != null && folder.getTaskDetails() != null
-                && !TextUtils.isEmpty(folder.getTaskDetails().getTaskName())){
+        } else if (folder != null && folder.getTaskDetails() != null
+                && !TextUtils.isEmpty(folder.getTaskDetails().getTaskName())) {
             name = folder.getTaskDetails().getTaskName();
         }
-        if(!TextUtils.isEmpty(name)){
+        if (!TextUtils.isEmpty(name)) {
             ((TextView) view).setText(name);
         }
     }
@@ -52,42 +53,55 @@ public class BindingAdapters {
       /*  if(folder.getTaskDetails() != null ){
             size = folder.getTaskDetails();
         }*/
-        ((TextView) view).setText(""+size);
+        ((TextView) view).setText("" + size);
     }
 
     @BindingAdapter("taskDate")
     public static void setTaskDate(View view, AddTaskDetails addTaskDetails) {
-        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskDate())){
+        if (addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskDate())) {
             ((TextView) view).setText(addTaskDetails.getTaskDate());
-        }else {
+        } else {
             ((TextView) view).setText("Select Task date");
         }
     }
 
     @BindingAdapter("taskTime")
     public static void setTaskTime(View view, AddTaskDetails addTaskDetails) {
-        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskTime())){
+        if (addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskTime())) {
             ((TextView) view).setText(addTaskDetails.getTaskTime());
-        }else {
+        } else {
             ((TextView) view).setText("Select Task Time");
         }
     }
 
     @BindingAdapter("taskNote")
     public static void setTaskNote(View view, AddTaskDetails addTaskDetails) {
-        if(addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskNote())){
+        if (addTaskDetails != null && !TextUtils.isEmpty(addTaskDetails.getTaskNote())) {
             ((TextView) view).setText(addTaskDetails.getTaskNote());
-        }else {
+        } else {
             ((TextView) view).setText("");
         }
     }
 
     @BindingAdapter("deleteFolderName")
     public static void deleteFolderName(View view, FolderEntity folderEntity) {
-        if(folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())){
-            ((TextView) view).setText("Delete "+ folderEntity.getFolderName()+"?");
-        }else {
+        if (folderEntity != null && !TextUtils.isEmpty(folderEntity.getFolderName())) {
+            ((TextView) view).setText("Delete " + folderEntity.getFolderName() + "?");
+        } else {
             ((TextView) view).setText("Delete ");
+        }
+    }
+
+    @BindingAdapter("repeatingMode")
+    public static void setRepeatMode(View view, AddTaskDetails addTaskDetails) {
+        if (addTaskDetails != null) {
+            ((TextView) view).setText(addTaskDetails.getTaskRepeatMode());
+            ((TextView) view).setTextColor(view.getContext().getResources().getColor(R.color.black));
+            ((TextView) view).setBackground(view.getContext().getResources().getDrawable(R.drawable.outline_rounded_purple));
+        } else {
+            ((TextView) view).setText("Select");
+            ((TextView) view).setTextColor(view.getContext().getResources().getColor(R.color.black));
+            ((TextView) view).setBackground(view.getContext().getResources().getDrawable(R.drawable.outline_rounded_purple));
         }
     }
 }

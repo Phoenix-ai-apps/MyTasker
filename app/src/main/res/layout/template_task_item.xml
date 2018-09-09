@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--HEADER-->
+        <LinearLayout
+            android:id="@+id/linear_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_500"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:visibility="gone">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <com.b2b.mytask.customviews.CustomTextView
+                    android:id="@+id/txt_header_task"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center"
+                    android:padding="@dimen/_5sdp"
+                    android:textColor="@color/white"
+                    app:fontName="@string/regular_font" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+
+        <com.daimajia.swipe.SwipeLayout
+            android:id="@+id/swipe_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:clickToClose="true">
+
+            <!--RIGHT SWIPE -->
+            <LinearLayout
+                android:id="@+id/linear_right_swipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:id="@+id/linear_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/gradient_sharp_corner_red"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
+                        android:src="@drawable/ic_delete" />
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:text="@string/delete"
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/gradient_sharp_corner_blue"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6"
+                        android:src="@drawable/ic_edit" />
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:text="@string/edit_lower"
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!--LEFT SWIPE -->
+            <LinearLayout
+                android:id="@+id/linear_left_swipe"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:id="@+id/linear_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/gradient_sharp_corner_green"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/img_finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.6" />
+
+                    <com.b2b.mytask.customviews.CustomTextView
+                        android:id="@+id/txt_task_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
+                        android:text="@string/finish"
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        app:fontName="@string/regular_font" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!--Main Layout-->
+            <include
+                android:id="@+id/include_template"
+                layout="@layout/template_calender_task_item" />
+
+        </com.daimajia.swipe.SwipeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp" />
+
+    </LinearLayout>
+
+</layout>

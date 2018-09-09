@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.b2b.mytask.utils.ApplicationUtils" />
+
+        <variable
+            name="selectedPeople"
+            type="com.b2b.mytask.models.MeetingPeopleDO" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/contraint_main"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/txt_initials"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_contacts_row"
+                android:gravity="center"
+                android:text="@{ApplicationUtils.getInitialOfName(selectedPeople.user_name)}"
+                android:textColor="@android:color/white"
+                app:fontName="@string/regular_font"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/img_remove"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="end"
+                android:background="@drawable/circle_contacts_row_close"
+                android:padding="3dp"
+                android:src="@drawable/ic_close_1" />
+        </FrameLayout>
+
+        <com.b2b.mytask.customviews.CustomTextView
+            android:id="@+id/txt_contacts_names"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:text="@{selectedPeople.user_name}"
+            android:textColor="@android:color/black"
+            android:textSize="10sp"
+            app:fontName="@string/regular_font"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -16,27 +16,27 @@ import java.util.List;
 /**
  * Created by Abhishek Singh on 27/5/18.
  */
-public class DataRepository implements HelperInterface{
+public class DataRepository implements HelperInterface {
     private static DataRepository dataRepository;
     private final MyTaskDatabase taskDatabase;
     private MediatorLiveData<List<FolderEntity>> obervableFolderEntity;
 
-    private DataRepository(MyTaskDatabase myTaskDatabase){
+    private DataRepository(MyTaskDatabase myTaskDatabase) {
         taskDatabase = myTaskDatabase;
         obervableFolderEntity = new MediatorLiveData<>();
 
         obervableFolderEntity.addSource(taskDatabase.getFolderDao().getAllFolder(),
-                allFolderEntity ->{
-                    if(taskDatabase.getDatabaseCreated().getValue() != null){
+                allFolderEntity -> {
+                    if (taskDatabase.getDatabaseCreated().getValue() != null) {
                         obervableFolderEntity.postValue(allFolderEntity);
                     }
                 });
     }
 
-    public static DataRepository getDataRepository(final MyTaskDatabase myTaskDatabase){
-        if(dataRepository == null){
-            synchronized (DataRepository.class){
-                if(dataRepository == null){
+    public static DataRepository getDataRepository(final MyTaskDatabase myTaskDatabase) {
+        if (dataRepository == null) {
+            synchronized (DataRepository.class) {
+                if (dataRepository == null) {
                     dataRepository = new DataRepository(myTaskDatabase);
                 }
             }
@@ -47,35 +47,47 @@ public class DataRepository implements HelperInterface{
     /**
      * Get the list of folders from the database and get notified when the data changes.
      */
-    public LiveData<List<FolderEntity>> getAllFolder(){
+    public LiveData<List<FolderEntity>> getAllFolder() {
         return obervableFolderEntity;
     }
 
-    public LiveData<List<FolderEntity>> getAllFolderByParent(String from){
+    public LiveData<List<FolderEntity>> getAllFolderByParent(String from) {
         return taskDatabase.getFolderDao().getFolderByParentFolder(from);
     }
 
-    public LiveData<List<FolderEntity>> getAllFolderListByName(String name){
+    public LiveData<List<FolderEntity>> getAllFolderListByName(String name) {
         return taskDatabase.getFolderDao().getFolderListByName(name);
     }
 
-    public LiveData<List<TaskDetailsEntity>> getAllTaskDetails(){
+    public LiveData<List<TaskDetailsEntity>> getAllTaskDetails() {
         return taskDatabase.getTaskDetailsDao().loadAllTaskDetails();
     }
 
-    public LiveData<List<SubFolderEntity>> getAllSubFolder(){
+    public LiveData<List<TaskDetailsEntity>> getAllTaskDetailsbyWeek(String startDateOfWeek, String endDateOfWeek) {
+        return taskDatabase.getTaskDetailsDao().loadAllTaskDetailsByWeek(startDateOfWeek, endDateOfWeek);
+    }
+
+    public LiveData<List<TaskDetailsEntity>> getAllTaskDetailsbyToday(String currentDateOfWeek) {
+        return taskDatabase.getTaskDetailsDao().loadAllTaskDetailsByToday(currentDateOfWeek);
+    }
+
+    public LiveData<List<TaskDetailsEntity>> getAllTaskDetailsbyCompleted() {
+        return taskDatabase.getTaskDetailsDao().loadAllTaskDetailsByCompleted("1");
+    }
+
+    public LiveData<List<SubFolderEntity>> getAllSubFolder() {
         return taskDatabase.getSubFolderDao().loadAllSubFolders();
     }
 
-    public FolderEntity getFolderByName(String name, String parentFolder){
-        return taskDatabase.getFolderDao().getFolderByFrom(name, parentFolder);
+    public FolderEntity getFolderByName(String name, String parentFolder) {
+        return taskDatabase.getFolderDao().getFolderByName(name, parentFolder);
     }
 
-    public TaskDetailsEntity getTaskByName(String name, String parentFolder){
+    public TaskDetailsEntity getTaskByName(String name, String parentFolder) {
         return taskDatabase.getTaskDetailsDao().getTaskByName(name, parentFolder);
     }
 
-    public LiveData<FolderCycleFlowEntity> getFolderEntFromFolderCycleByName(String name){
+    public LiveData<FolderCycleFlowEntity> getFolderEntFromFolderCycleByName(String name) {
         LiveData<FolderCycleFlowEntity> cycleFlowEntity =
                 taskDatabase.getFolderCycleFlowDao().getFolderCycleFlowByName(name);
         return cycleFlowEntity;

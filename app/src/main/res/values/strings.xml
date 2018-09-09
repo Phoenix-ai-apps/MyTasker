@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">MyTask</string>
+    <string name="app_name">Angel Broking B2B</string>
     <string name="inbox">Inbox</string>
     <string name="today">Today</string>
     <string name="this_week">This week</string>
     <string name="all_tasks">All Tasks</string>
     <string name="trips">Trips</string>
-    <string name="completed">Completed</string>
     <string name="meetings">Meetings</string>
     <string name="new_folder">New Folder</string>
     <string name="enter_folder_name">Enter folder name</string>
@@ -24,6 +23,7 @@
     <string name="priority">Priority</string>
     <string name="none">None</string>
     <string name="move_to">Move To</string>
+    <string name="moved_to">Moved To</string>
     <string name="select_date">Select Task date</string>
     <string name="select_time">Select Task Time</string>
     <string name="add_task">Enter Task</string>
@@ -37,6 +37,8 @@
     <string name="due">Due</string>
     <string name="remind_me">Remind me at</string>
     <string name="select_repeat_mode">Select repeat mode</string>
+    <string name="description">Description</string>
+    <string name="enter_name_of_recipient">Search...</string>
 
     <array name="colours">
         <item>@color/light_1</item>
@@ -59,4 +61,46 @@
         <item>@color/light_18</item>
     </array>
 
+    <string name="regular_font">quicksand_book.otf</string>
+    <string name="bold_font">quicksand_bold.otf</string>
+    <string name="create_task">Create Task</string>
+    <string name="heading">Task Name</string>
+    <string name="alert">Alert before</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="location">Location</string>
+    <string name="start_date_time">Start date and time</string>
+    <string name="select_date_time">Select date and time</string>
+    <string name="end_date_time">End date and time</string>
+    <string name="select">Select</string>
+    <string name="home">Home</string>
+    <string name="task_id">GET_TASKID</string>
+    <string name="parent_column">PARENT_COLUMN</string>
+    <string name="folder">folder</string>
+    <string name="completed">Completed</string>
+    <string name="finish">  Finish</string>
+    <string name="unfinish">Unfinish</string>
+    <string name="no_more_folders">No more folders</string>
+    <string name="no_task_available">No Tasks Available To Show</string>
+    <string name="select_date_amp_time"><![CDATA[Select Date & Time]]></string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="very_high">Very high</string>
+    <string name="priority_yellow">yellow</string>
+    <string name="priority_blue">blue</string>
+    <string name="priority_green">green</string>
+    <string name="priority_red">red</string>
+    <string name="priority_level_low">Low</string>
+    <string name="priority_level_medium">Medium</string>
+    <string name="priority_level_high">High</string>
+    <string name="priority_level_very_high">Very high</string>
+    <string name="please_select_time">Please Select Time</string>
+    <string name="select_task_date">Select Task Date</string>
+    <string name="please_select_priority">Please Select Priority</string>
+    <string name="please_select_alert_reminder">Please Select Alert Reminder</string>
+    <string name="enter_task_description">Enter Task Description</string>
+    <string name="task_already_exists">Task with this name already exists</string>
+    <string name="exit_app">Are you sure you want to exit app?</string>
+    <string name="exit">Exit</string>
 </resources>

@@ -7,10 +7,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/inc_toolbar"
-            layout="@layout/template_toolbar" />
-
         <FrameLayout
             android:id="@+id/frameLayout_main"
             android:layout_width="match_parent"

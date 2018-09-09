@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomTextView">
+        <attr name="fontName" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomEditText">
+        <attr name="editFont" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomTextInputLayout">
+        <attr name="inputFont" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+    <declare-styleable name="FlowLayout_Layout">
+        <attr name="android:layout_gravity" />
+    </declare-styleable>
+</resources>

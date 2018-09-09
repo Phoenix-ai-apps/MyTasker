@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="folder"
-            type="com.b2b.mytask.db.entities.FolderEntity"/>
+            type="com.b2b.mytask.db.entities.FolderEntity" />
     </data>
 
     <RelativeLayout
         android:id="@+id/mToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
+        android:background="@drawable/gradient_sharp_corner_purple"
         android:gravity="center"
         app:theme="@style/Theme.MyFancyTheme">
 
@@ -35,21 +35,23 @@
                     android:clickable="true"
                     android:onClick="backToPrevious"
                     android:padding="@dimen/_5sdp"
-                    android:src="@drawable/ic_back" />
+                    android:src="@drawable/ic_back_white" />
 
-                <android.support.v7.widget.AppCompatTextView
+
+                <com.b2b.mytask.customviews.CustomTextView
                     android:id="@+id/txt_toolbar_title"
                     style="@style/Both_Wrap_style"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/img_back_arrow"
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="@{folder.folderName}"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true">
 
@@ -58,6 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_5sdp"
+                        android:visibility="gone"
                         android:src="@drawable/ic_swap" />
 
                     <android.support.v7.widget.AppCompatImageView
@@ -66,14 +69,10 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/img_filter"
                         android:padding="@dimen/_5sdp"
-                        android:src="@drawable/share" />
+                        android:src="@drawable/ic_share" />
                 </RelativeLayout>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_500"/>
 
         </android.support.constraint.ConstraintLayout>
 

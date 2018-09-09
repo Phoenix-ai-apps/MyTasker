@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false">
 
     <data>
-      <variable
-          name="folder"
-          type="com.b2b.mytask.db.entities.FolderEntity"/>
+
+        <variable
+            name="folder"
+            type="com.b2b.mytask.db.entities.FolderEntity" />
     </data>
 
     <RelativeLayout
@@ -22,7 +24,7 @@
             android:padding="@dimen/_10sdp"
             android:visibility="gone">
 
-            <android.support.v7.widget.AppCompatTextView
+            <com.b2b.mytask.customviews.CustomTextView
                 style="@style/work_hdr"
                 android:gravity="start|center"
                 android:text="@string/completed"
@@ -42,16 +44,101 @@
             android:id="@+id/rv_work"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
             android:layout_below="@+id/cl_folder_title"
-            android:layout_above="@+id/footer"/>
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-        <include
-            android:id="@+id/footer"
-            layout="@layout/layout_footer"
+        <LinearLayout
+            android:id="@+id/rl_fab_folder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/ctv_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/gradient_rounded_corner_purple"
+                android:padding="@dimen/_5sdp"
+                android:text="New Folder"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:fontName="@string/regular_font" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/deep_purple_500"
+                android:shadowColor="@android:color/white"
+                app:borderWidth="0dp"
+                app:srcCompat="@drawable/ic_folder"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_fab_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <com.b2b.mytask.customviews.CustomTextView
+                android:id="@+id/ctv_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/gradient_rounded_corner_purple"
+                android:padding="@dimen/_5sdp"
+                android:text="New Task"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:fontName="@string/regular_font" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/deep_purple_500"
+                android:shadowColor="@android:color/white"
+                app:borderWidth="0dp"
+                app:srcCompat="@drawable/ic_task_white"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="@color/purple_500"
+            android:shadowColor="@android:color/white"
+            app:borderWidth="0dp"
+            app:srcCompat="@drawable/ic_add"
+            tools:ignore="VectorDrawableCompat" />
+
+        <View
+            android:id="@+id/view_bg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </layout>
